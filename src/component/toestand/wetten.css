@@ -1,0 +1,97 @@
+.wetgeving th > p.al {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.wetgeving td > p.al:first-child {
+  margin-top: 0;
+}
+
+.wetgeving td > p.al:last-child {
+  margin-bottom: 0;
+}
+
+.wetgeving .entry.align-left {
+  text-align: left;
+}
+
+.list--law__unordered td > p,
+.list--law__unordered th > p {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.breadcrumb li .button--text {
+  padding: 0;
+  text-decoration: none;
+  color: #154273;
+  vertical-align: baseline;
+}
+
+.breadcrumb li .button--text:hover {
+  text-decoration: underline;
+}
+
+.origineel-opschrift-en-aanhef .collapsible__content,
+.slotformulier-en-ondertekening .collapsible__content {
+  background-color: #e5f1f9;
+}
+
+.tussenkop-cur {
+  font-style: italic;
+}
+
+.tussenkop-vet {
+  font-weight: bold;
+}
+
+.tussenkop-vetcur {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.tussenkop-ondlijn {
+  text-decoration: underline;
+}
+
+.geraakte-onderdelen {
+  display: none;
+}
+
+.informatie-melding {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-height: 80px;
+  overflow: auto;
+  border: 1px solid #ccc;
+  text-align: center;
+  background-color: #e5f1f9;
+}
+
+.alert.alert--warning.alert-custom {
+  background-color: #f4c8c5;
+  border-color: #f4c8c5;
+}
+
+@media print {
+  .informatie-melding {
+    display: none !important;
+  }
+}
+
+.voetnootnummer {
+  vertical-align: text-bottom;
+  font-size: smaller;
+  text-decoration: none;
+}
+
+.form__element.checkboxgroup.inline-group label,
+.form__element.radiogroup.inline-group label {
+  margin-right: 0;
+}
+
+.form__element.checkboxgroup.inline-group label + label,
+.form__element.radiogroup.inline-group label + label {
+  margin-left: 0.5em;
+}
