@@ -14,6 +14,8 @@ import BwbBijlage from "./bwb-bijlage";
 import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
 import BwbRawText from "./bwb-raw-text";
 import { getToestand } from "../../api/wettenRepository";
+import type { Verdrag } from "../../api";
+import BwbVerdrag from "./bwb-verdrag";
 
 interface BwbPreviewContentProps {
   bwbId: string;
@@ -27,6 +29,9 @@ export function BwbPreviewContent({
   isToekomstig,
 }: BwbPreviewContentProps) {
   const [regelingTekst, setRegelingTekst] = useState<RegelingTekst | undefined>(
+    undefined,
+  );
+  const [verdragen, setVerdragen] = useState<Verdrag[] | null | undefined>(
     undefined,
   );
   const [wettekst, setWettekst] = useState<Wettekst | undefined>(undefined);
@@ -45,6 +50,7 @@ export function BwbPreviewContent({
   useEffect(() => {
     getToestand(bwbId, expression, isToekomstig)
       .then((data) => {
+        setVerdragen(data?.wetgeving?.verdrag);
         setRegelingTekst(data?.wetgeving?.regeling?.regelingTekst);
         setBijlage(data?.wetgeving?.regeling?.bijlage);
         setWettekst(data?.wetgeving?.wetBesluit?.wettekst);
@@ -122,11 +128,18 @@ export function BwbPreviewContent({
 
   return (
     <div className="bwb-preview">
-      {bwbId}_{expression}.xml
+      <a
+        href={`https://repository.officiele-overheidspublicaties.nl/${isToekomstig ? "BWBTT" : "BWB"}/${bwbId}/${expression}/xml/${bwbId}_${expression}.xml`}
+      >
+        {bwbId}_{expression}.xml
+      </a>
       <Heading level={1}>
         <BwbRawText id="citeerTitel" rawText={citeerTitel?.text?.join(" ")} />
       </Heading>
       <div className="wetgeving">
+        {verdragen?.map((verdrag) => (
+          <BwbVerdrag bwbId={bwbId} verdrag={verdrag} />
+        ))}
         <BwbRegelingTekst bwbId={bwbId} regelingTekst={regelingTekst} />
         <BwbWettekst bwbId={bwbId} wettekst={wettekst} />
         {bijlage?.map((bijlage, index) => (
