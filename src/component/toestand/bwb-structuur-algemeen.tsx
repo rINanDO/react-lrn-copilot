@@ -1,10 +1,12 @@
-import type { Li } from "../../api";
+import type { Li, Plaatje } from "../../api";
 import BwbLijst from "./bwb-lijst";
+import BwbPlaatje from "./bwb-plaatje";
 import BwbRawText from "./bwb-raw-text";
 
 function BwbStructuurAlgemeen({
   id,
   structuurAlgemeen,
+  className,
 }: {
   id: string;
   structuurAlgemeen: any;
@@ -28,16 +30,38 @@ function BwbStructuurAlgemeen({
               />
             </>
           );
-        else
+
+        if (structuurAlgemeen.$element === "plaatje")
+          return (
+            <BwbPlaatje
+              id={`${id}_plaatje`}
+              key={`${id}_plaatje`}
+              plaatje={structuurAlgemeen as Plaatje}
+            />
+          );
+
+        if (className === "al")
           return (
             <>
-              <BwbRawText
-                id={`${id}_rawText`}
-                key={`${id}_rawText`}
-                rawText={structuurAlgemeen.text?.join(" ")}
-              />
+              <p className="al">
+                {" "}
+                <BwbRawText
+                  id={`${id}_rawText`}
+                  key={`${id}_rawText`}
+                  rawText={structuurAlgemeen.text?.join(" ")}
+                />
+              </p>{" "}
             </>
           );
+        return (
+          <>
+            <BwbRawText
+              id={`${id}_rawText`}
+              key={`${id}_rawText`}
+              rawText={structuurAlgemeen.text?.join(" ")}
+            />
+          </>
+        );
       })()}
     </>
   );
