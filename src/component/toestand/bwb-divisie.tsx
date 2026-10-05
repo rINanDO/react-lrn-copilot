@@ -4,24 +4,24 @@ import BwbArtikel from "./bwb-artikel";
 import type { Divisie, Table } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 import BwbTable from "./bwb-table";
+import BwbKop from "./bwb-kop";
 
 function BwbDivisie({ divisie }: { divisie?: Divisie }) {
   if (!divisie) {
     return <></>;
   }
+  const kopKey = `${divisie.id}_artikel_kop`;
 
-  const label = divisie?.kop?.label?.join(" ");
-  const nummer = divisie?.kop?.nr?.map((nr) => nr.text?.join(" ")).join(" ");
-  const titelTekst = divisie?.kop?.titel
-    ?.map((titel) => titel.text?.join(" "))
-    .join(" ");
-
-  const basisTitel = `${label} ${nummer}`.trim();
-  const title = titelTekst ? `${basisTitel}. ${titelTekst}` : basisTitel;
   return (
     <>
       <div className="article__header--law divisie">
-        <h4 id={divisie.id ?? ""}>{title}</h4>
+        <BwbKop
+          id={kopKey}
+          key={kopKey}
+          kop={divisie.kop}
+          headingLevel={4}
+          includeDot={true}
+        />
       </div>
       {divisie.artikel?.map((artikel) => (
         <BwbArtikel
@@ -41,6 +41,12 @@ function BwbDivisie({ divisie }: { divisie?: Divisie }) {
       })}
       {divisie.table?.map((table: Table, index: number) => (
         <BwbTable key={`${divisie.id}_table_${index}`} table={table}></BwbTable>
+      ))}
+      {divisie.divisie?.map((subDivisie) => (
+        <BwbDivisie
+          key={`${divisie.id}_divisie_${subDivisie.id}`}
+          divisie={subDivisie}
+        ></BwbDivisie>
       ))}
     </>
   );
