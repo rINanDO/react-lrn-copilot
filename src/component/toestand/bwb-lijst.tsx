@@ -12,7 +12,6 @@ function BwbLijst({ id, lijst }: { id: string; lijst: Lijst }) {
         className="list--law__unordered expliciet whitspace-small"
       >
         {lijst.li.map((listItem: Li, index: number) => {
-          debugger;
           return (
             <BwbLi
               id={`${id}_item${index}`}
