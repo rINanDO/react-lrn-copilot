@@ -21,6 +21,18 @@ export function getToestandUrl(
   return `${baseUrl}/${path}/${id}/${expr}/xml/${id}_${expr}.xml`;
 }
 
+/** URL of an illustration (e.g. `247668.png`), stored next to the toestand XML. */
+export function getIllustratieUrl(
+  bwbId: string,
+  expression: string,
+  naam: string,
+  isToekomstig: boolean = false,
+  baseUrl = WETTEN_REPOSITORY_BASE_URL,
+): string {
+  const path = isToekomstig ? "BWBTT" : "BWB";
+  return `${baseUrl}/${path}/${encodeURIComponent(bwbId)}/${encodeURIComponent(expression)}/xml/${encodeURIComponent(naam)}`;
+}
+
 export function parseToestand(xml: string): Toestand {
   const document = new DOMParser().parseFromString(xml, "application/xml");
   replaceElementsByText("al", document);
