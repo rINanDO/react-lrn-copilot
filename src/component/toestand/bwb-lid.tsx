@@ -19,14 +19,15 @@ function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
                 structuurAlgemeen?.li && structuurAlgemeen?.li?.length > 0;
 
               if (isLijst) {
-                return;
-                <>
-                  <BwbStructuurAlgemeen
-                    id={`${id}_lid${index}`}
-                    key={`${id}_lid${index}`}
-                    structuurAlgemeen={structuurAlgemeen}
-                  />
-                </>;
+                return (
+                  <>
+                    <BwbStructuurAlgemeen
+                      id={`${id}_lid${index}`}
+                      key={`${id}_lid${index}`}
+                      structuurAlgemeen={structuurAlgemeen}
+                    />
+                  </>
+                );
               }
               if (index === 0) {
                 return (
