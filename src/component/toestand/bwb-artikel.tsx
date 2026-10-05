@@ -4,8 +4,14 @@ import BwbLid from "./bwb-lid";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 import BwbKop from "./bwb-kop";
 import type { Artikel } from "../../api";
+import { encodeHTML } from "./utils";
 
 function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
+  const inwerkingtredingDatum =
+    artikel?.metaData?.brondata?.[0]?.inwerkingtreding?.inwerkingtredingDatum
+      ?.isodatum;
+  const publicatieEffect =
+    artikel?.metaData?.brondata?.[0]?.inwerkingtreding?.publicatie?.effect;
   const artikelId = `${artikel?.variabelDeel}`;
   if (!artikel) {
     return <></>;
@@ -21,38 +27,59 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
           headingLevel={4}
           includeDot={true}
         />
+        {(() => {
+          switch (publicatieEffect) {
+            case "vervallen":
+              return (
+                <p>[Vervallen per {encodeHTML(inwerkingtredingDatum ?? "")}]</p>
+              );
+            default:
+              return <></>;
+          }
+        })()}
       </div>
-      <div className="artikel" id={artikelId}>
-        {artikel.structuurAlgemeen?.map((structuurAlgemeen: any, index) => {
-          const structuurAlgemeenKey = `${id}_structuurAlgemeen${index}`;
-          const isLijst =
-            structuurAlgemeen?.li && structuurAlgemeen?.li.length > 0;
+      {(() => {
+        if (publicatieEffect === "vervallen") {
+          return <></>;
+        }
+        return (
+          <>
+            <div className="artikel" id={artikelId}>
+              {artikel.structuurAlgemeen?.map(
+                (structuurAlgemeen: any, index) => {
+                  const structuurAlgemeenKey = `${id}_structuurAlgemeen${index}`;
+                  const isLijst =
+                    structuurAlgemeen?.li && structuurAlgemeen?.li.length > 0;
 
-          return isLijst ? (
-            <>
-              <BwbStructuurAlgemeen
-                id={structuurAlgemeenKey}
-                key={structuurAlgemeenKey}
-                structuurAlgemeen={structuurAlgemeen}
-              />
-            </>
-          ) : (
-            <>
-              <p className="al">
-                <BwbStructuurAlgemeen
-                  id={structuurAlgemeenKey}
-                  key={structuurAlgemeenKey}
-                  structuurAlgemeen={structuurAlgemeen}
-                />
-              </p>
-            </>
-          );
-        })}
-        {artikel.lid?.map((lid, index) => {
-          const key = `${id}_lid${index}`;
-          return <BwbLid key={key} id={key} lid={lid} />;
-        })}
-      </div>
+                  return isLijst ? (
+                    <>
+                      <BwbStructuurAlgemeen
+                        id={structuurAlgemeenKey}
+                        key={structuurAlgemeenKey}
+                        structuurAlgemeen={structuurAlgemeen}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <p className="al">
+                        <BwbStructuurAlgemeen
+                          id={structuurAlgemeenKey}
+                          key={structuurAlgemeenKey}
+                          structuurAlgemeen={structuurAlgemeen}
+                        />
+                      </p>
+                    </>
+                  );
+                },
+              )}
+              {artikel.lid?.map((lid, index) => {
+                const key = `${id}_lid${index}`;
+                return <BwbLid key={key} id={key} lid={lid} />;
+              })}
+            </div>
+          </>
+        );
+      })()}
     </>
   );
 }
