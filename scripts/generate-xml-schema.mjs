@@ -16,12 +16,14 @@ const output = resolve(root, 'src/api/xmlSchema.gen.ts');
 const source = readFileSync(input, 'utf8').replace(/\r\n/g, '\n');
 
 const enums = new Set();
-for (const match of source.matchAll(/^export type (\w+) = (-?\d+(?: \| -?\d+)*);$/gm)) {
+// Numeric unions, on one line (`= 0 | 1;`) or wrapped by a formatter (`=\n  | 0\n  | 1;`).
+for (const match of source.matchAll(/^export type (\w+) =\s+(?:\|\s*)?-?\d+(?:\s*\|\s*-?\d+)*;$/gm)) {
     enums.add(match[1]);
 }
 
 const objectTypes = new Map();
-for (const match of source.matchAll(/^export type (\w+) = \{\n([\s\S]*?)^\};$/gm)) {
+// Also matches long names where a formatter moved the `{` to its own line.
+for (const match of source.matchAll(/^export type (\w+) =\s+\{\n([\s\S]*?)^\s*\};$/gm)) {
     const [, name, body] = match;
     if (name.endsWith('Writable')) continue;
     const fields = [];

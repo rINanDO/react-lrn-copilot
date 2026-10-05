@@ -31,4 +31,19 @@ describe('parseManifest', () => {
       ],
     });
   });
+
+  it('orders the expressions chronologically', () => {
+    const xml = `<work label="BWBR0011353">${['2025-01-01_4', '2026-02-21_0', '2025-01-01_10', '2024-06-01_0']
+      .map(
+        (label) =>
+          `<expression label="${label}"><manifestation label="xml"><item label="x.xml" _deleted="false" /></manifestation></expression>`,
+      )
+      .join('')}</work>`;
+    expect(parseManifest(xml).expressions.map((expression) => expression.label)).toEqual([
+      '2024-06-01_0',
+      '2025-01-01_4',
+      '2025-01-01_10',
+      '2026-02-21_0',
+    ]);
+  });
 });

@@ -104,7 +104,23 @@ export function getManifestUrl(
   return `${baseUrl}/BWB/${encodeURIComponent(bwbId)}/manifest.xml`;
 }
 
-/** Parses a BWB work manifest. Expressions whose items are all deleted are skipped. */
+/**
+ * Orders expression labels (`2025-01-01_4`) chronologically: by date, then by
+ * the numeric sequence, so `_10` comes after `_9`.
+ */
+function compareExpressionLabels(
+  a: ManifestExpression,
+  b: ManifestExpression,
+): number {
+  const [dateA, seqA = "0"] = a.label.split("_");
+  const [dateB, seqB = "0"] = b.label.split("_");
+  return dateA.localeCompare(dateB) || Number(seqA) - Number(seqB);
+}
+
+/**
+ * Parses a BWB work manifest into its expressions, oldest first. The manifest
+ * itself is not ordered. Expressions whose items are all deleted are skipped.
+ */
 export function parseManifest(xml: string): Manifest {
   const document = new DOMParser().parseFromString(xml, "application/xml");
   const parseError = document.querySelector("parsererror");
@@ -131,7 +147,8 @@ export function parseManifest(xml: string): Manifest {
         "datum_inwerkingtreding",
       ),
       einddatum: metadataValue(expression, "einddatum"),
-    }));
+    }))
+    .sort(compareExpressionLabels);
 
   return {
     bwbId: document.documentElement.getAttribute("label") ?? "",
