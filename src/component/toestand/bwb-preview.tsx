@@ -18,6 +18,7 @@ import type { Verdrag } from "../../api";
 import BwbVerdrag from "./bwb-verdrag";
 import { BwbToestandContext } from "./bwb-toestand-context";
 import Footer from "../page/footer";
+import SideBar from "../page/side-bar";
 
 interface BwbPreviewContentProps {
   bwbId: string;
@@ -43,6 +44,9 @@ export function BwbPreviewContent({
   const [citeerTitel, setCiteerTitel] = useState<Citeertitel | undefined>(
     undefined,
   );
+  const [toc, setToc] = useState<Wettekst | RegelingTekst | undefined>(
+    undefined,
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<{
     message: string;
@@ -57,6 +61,10 @@ export function BwbPreviewContent({
         setBijlage(data?.wetgeving?.regeling?.bijlage);
         setWettekst(data?.wetgeving?.wetBesluit?.wettekst);
         setCiteerTitel(data?.wetgeving?.citeertitel);
+        setToc(
+          data?.wetgeving?.regeling?.regelingTekst ??
+            data?.wetgeving?.wetBesluit?.wettekst,
+        );
       })
       .catch((err: unknown) => {
         let message = "Er is een fout opgetreden bij het laden van de preview.";
@@ -137,16 +145,11 @@ export function BwbPreviewContent({
           {bwbId}_{expression}.xml
         </a>
         <div className="container columns columns--sticky-sidebar row">
-          <div id="sidebar" className="columns--sticky-sidebar__sidebar">
-            <div>
-              TODO SIDEBAR TODO SIDEBAR TODO SIDEBAR TODO SIDEBAR TODO SIDEBAR
-              TODO SIDEBAR{" "}
-            </div>
-          </div>
-          <div id="content">
-            <BwbToestandContext.Provider
-              value={{ bwbId, expression, isToekomstig }}
-            >
+          <BwbToestandContext.Provider
+            value={{ bwbId, expression, isToekomstig }}
+          >
+            <SideBar toc={toc}></SideBar>
+            <div id="content">
               <div id="regeling">
                 <Heading level={1}>
                   <BwbRawText
@@ -168,8 +171,8 @@ export function BwbPreviewContent({
                   ))}
                 </div>
               </div>
-            </BwbToestandContext.Provider>
-          </div>
+            </div>
+          </BwbToestandContext.Provider>
         </div>
         <Footer></Footer>
       </div>

@@ -19,20 +19,22 @@ function BwbLi({ id, li }: { id: string; li: Li }) {
             className="labeled"
             structuurAlgemeen={firstStructuurAlgemeen}
           />
+          {structuurAlgemeen?.map(
+            (liStructuurAlgemeen: any, liIndex: number) => {
+              const className = liStructuurAlgemeen?.li ? "labeled" : "al";
+              return (
+                <>
+                  <BwbStructuurAlgemeen
+                    id={`${id}_${liIndex + 1}`}
+                    key={`${id}_${liIndex + 1}`}
+                    className={className}
+                    structuurAlgemeen={liStructuurAlgemeen}
+                  />
+                </>
+              );
+            },
+          )}
         </p>
-        {structuurAlgemeen?.map((liStructuurAlgemeen: any, liIndex: number) => {
-          const className = liStructuurAlgemeen?.li ? "labeled" : "al";
-          return (
-            <>
-              <BwbStructuurAlgemeen
-                id={`${id}_${liIndex + 1}`}
-                key={`${id}_${liIndex + 1}`}
-                className={className}
-                structuurAlgemeen={liStructuurAlgemeen}
-              />
-            </>
-          );
-        })}
       </li>
     </>
   );
