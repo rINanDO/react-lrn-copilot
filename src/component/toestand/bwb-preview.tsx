@@ -16,6 +16,7 @@ import BwbRawText from "./bwb-raw-text";
 import { getToestand } from "../../api/wettenRepository";
 import type { Verdrag } from "../../api";
 import BwbVerdrag from "./bwb-verdrag";
+import { BwbToestandContext } from "./bwb-toestand-context";
 
 interface BwbPreviewContentProps {
   bwbId: string;
@@ -127,26 +128,28 @@ export function BwbPreviewContent({
   }
 
   return (
-    <div className="bwb-preview">
-      <a
-        href={`https://repository.officiele-overheidspublicaties.nl/${isToekomstig ? "BWBTT" : "BWB"}/${bwbId}/${expression}/xml/${bwbId}_${expression}.xml`}
-      >
-        {bwbId}_{expression}.xml
-      </a>
-      <Heading level={1}>
-        <BwbRawText id="citeerTitel" rawText={citeerTitel?.text?.join(" ")} />
-      </Heading>
-      <div className="wetgeving">
-        {verdragen?.map((verdrag) => (
-          <BwbVerdrag bwbId={bwbId} verdrag={verdrag} />
-        ))}
-        <BwbRegelingTekst bwbId={bwbId} regelingTekst={regelingTekst} />
-        <BwbWettekst bwbId={bwbId} wettekst={wettekst} />
-        {bijlage?.map((bijlage, index) => (
-          <BwbBijlage key={`bijlage_${index}`} bijlage={bijlage} />
-        ))}
+    <BwbToestandContext.Provider value={{ bwbId, expression, isToekomstig }}>
+      <div className="bwb-preview">
+        <a
+          href={`https://repository.officiele-overheidspublicaties.nl/${isToekomstig ? "BWBTT" : "BWB"}/${bwbId}/${expression}/xml/${bwbId}_${expression}.xml`}
+        >
+          {bwbId}_{expression}.xml
+        </a>
+        <Heading level={1}>
+          <BwbRawText id="citeerTitel" rawText={citeerTitel?.text?.join(" ")} />
+        </Heading>
+        <div className="wetgeving">
+          {verdragen?.map((verdrag) => (
+            <BwbVerdrag bwbId={bwbId} verdrag={verdrag} />
+          ))}
+          <BwbRegelingTekst bwbId={bwbId} regelingTekst={regelingTekst} />
+          <BwbWettekst bwbId={bwbId} wettekst={wettekst} />
+          {bijlage?.map((bijlage, index) => (
+            <BwbBijlage key={`bijlage_${index}`} bijlage={bijlage} />
+          ))}
+        </div>
       </div>
-    </div>
+    </BwbToestandContext.Provider>
   );
 }
 
