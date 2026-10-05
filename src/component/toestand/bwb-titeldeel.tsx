@@ -1,4 +1,3 @@
-import "./generic.css";
 import "./wetten.css";
 import type { Afdeling, Artikel, Titeldeel, Paragraaf } from "../../api";
 import BwbKop from "./bwb-kop";

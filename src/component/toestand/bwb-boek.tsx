@@ -1,4 +1,3 @@
-import "./generic.css";
 import "./wetten.css";
 import type { Boek } from "../../api";
 import BwbTiteldeel from "./bwb-titeldeel";

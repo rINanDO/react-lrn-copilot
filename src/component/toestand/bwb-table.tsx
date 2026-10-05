@@ -1,4 +1,3 @@
-import "./generic.css";
 import "./wetten.css";
 import type { Table, Tgroup } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";

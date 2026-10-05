@@ -1,4 +1,3 @@
-import "./generic.css";
 import "./wetten.css";
 import BwbLid from "./bwb-lid";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
