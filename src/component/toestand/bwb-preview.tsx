@@ -17,6 +17,7 @@ import { getToestand } from "../../api/wettenRepository";
 import type { Verdrag } from "../../api";
 import BwbVerdrag from "./bwb-verdrag";
 import { BwbToestandContext } from "./bwb-toestand-context";
+import Footer from "../page/footer";
 
 interface BwbPreviewContentProps {
   bwbId: string;
@@ -128,28 +129,51 @@ export function BwbPreviewContent({
   }
 
   return (
-    <BwbToestandContext.Provider value={{ bwbId, expression, isToekomstig }}>
-      <div className="bwb-preview">
+    <>
+      <div className="preview">
         <a
           href={`https://repository.officiele-overheidspublicaties.nl/${isToekomstig ? "BWBTT" : "BWB"}/${bwbId}/${expression}/xml/${bwbId}_${expression}.xml`}
         >
           {bwbId}_{expression}.xml
         </a>
-        <Heading level={1}>
-          <BwbRawText id="citeerTitel" rawText={citeerTitel?.text?.join(" ")} />
-        </Heading>
-        <div className="wetgeving">
-          {verdragen?.map((verdrag) => (
-            <BwbVerdrag bwbId={bwbId} verdrag={verdrag} />
-          ))}
-          <BwbRegelingTekst bwbId={bwbId} regelingTekst={regelingTekst} />
-          <BwbWettekst bwbId={bwbId} wettekst={wettekst} />
-          {bijlage?.map((bijlage, index) => (
-            <BwbBijlage key={`bijlage_${index}`} bijlage={bijlage} />
-          ))}
+        <div className="container columns columns--sticky-sidebar row">
+          <div id="sidebar" className="columns--sticky-sidebar__sidebar">
+            <div>
+              TODO SIDEBAR TODO SIDEBAR TODO SIDEBAR TODO SIDEBAR TODO SIDEBAR
+              TODO SIDEBAR{" "}
+            </div>
+          </div>
+          <div id="content">
+            <BwbToestandContext.Provider
+              value={{ bwbId, expression, isToekomstig }}
+            >
+              <div id="regeling">
+                <Heading level={1}>
+                  <BwbRawText
+                    id="citeerTitel"
+                    rawText={citeerTitel?.text?.join(" ")}
+                  />
+                </Heading>
+                <div className="wetgeving">
+                  {verdragen?.map((verdrag) => (
+                    <BwbVerdrag bwbId={bwbId} verdrag={verdrag} />
+                  ))}
+                  <BwbRegelingTekst
+                    bwbId={bwbId}
+                    regelingTekst={regelingTekst}
+                  />
+                  <BwbWettekst bwbId={bwbId} wettekst={wettekst} />
+                  {bijlage?.map((bijlage, index) => (
+                    <BwbBijlage key={`bijlage_${index}`} bijlage={bijlage} />
+                  ))}
+                </div>
+              </div>
+            </BwbToestandContext.Provider>
+          </div>
         </div>
+        <Footer></Footer>
       </div>
-    </BwbToestandContext.Provider>
+    </>
   );
 }
 
