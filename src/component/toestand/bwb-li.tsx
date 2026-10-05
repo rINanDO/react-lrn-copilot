@@ -21,12 +21,13 @@ function BwbLi({ id, li }: { id: string; li: Li }) {
           />
         </p>
         {structuurAlgemeen?.map((liStructuurAlgemeen: any, liIndex: number) => {
+          const className = liStructuurAlgemeen?.li ? "labeled" : "al";
           return (
             <>
               <BwbStructuurAlgemeen
                 id={`${id}_${liIndex + 1}`}
                 key={`${id}_${liIndex + 1}`}
-                className="labeled"
+                className={className}
                 structuurAlgemeen={liStructuurAlgemeen}
               />
             </>
