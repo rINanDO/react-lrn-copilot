@@ -43,15 +43,18 @@ function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
                       id={`${id}_lid${index}`}
                       key={`${id}_lid${index}`}
                       structuurAlgemeen={structuurAlgemeen}
+                      noParagraph={true}
                     />
                   </p>
                 );
               } else {
-                <BwbStructuurAlgemeen
-                  id={`${id}_lid${index}`}
-                  key={`${id}_lid${index}`}
-                  structuurAlgemeen={structuurAlgemeen}
-                />;
+                return (
+                  <BwbStructuurAlgemeen
+                    id={`${id}_lid${index}`}
+                    key={`${id}_lid${index}`}
+                    structuurAlgemeen={structuurAlgemeen}
+                  />
+                );
               }
             },
           )}

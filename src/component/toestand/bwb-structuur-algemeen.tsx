@@ -1,4 +1,4 @@
-import type { Li, Plaatje } from "../../api";
+import type { Lijst, Plaatje } from "../../api";
 import BwbLijst from "./bwb-lijst";
 import BwbPlaatje from "./bwb-plaatje";
 import BwbRawText from "./bwb-raw-text";
@@ -6,11 +6,11 @@ import BwbRawText from "./bwb-raw-text";
 function BwbStructuurAlgemeen({
   id,
   structuurAlgemeen,
-  className,
+  noParagraph,
 }: {
   id: string;
   structuurAlgemeen: any;
-  className?: string;
+  noParagraph?: boolean;
 }) {
   if (!structuurAlgemeen) {
     return <></>;
@@ -19,16 +19,13 @@ function BwbStructuurAlgemeen({
   return (
     <>
       {(() => {
-        const lijst = structuurAlgemeen.li as Li[];
-        if (lijst)
+        if (structuurAlgemeen.$element === "lijst")
           return (
-            <>
-              <BwbLijst
-                id={`${id}_lijst`}
-                key={`${id}_lijst`}
-                lijst={{ li: lijst }}
-              />
-            </>
+            <BwbLijst
+              id={`${id}_lijst`}
+              key={`${id}_lijst`}
+              lijst={structuurAlgemeen as Lijst}
+            />
           );
 
         if (structuurAlgemeen.$element === "plaatje")
@@ -39,20 +36,28 @@ function BwbStructuurAlgemeen({
               plaatje={structuurAlgemeen as Plaatje}
             />
           );
-
-        if (className === "al")
-          return (
+        if (structuurAlgemeen.$element === "al") {
+          return noParagraph ? (
+            <>
+              <BwbRawText
+                id={`${id}_rawText`}
+                key={`${id}_rawText`}
+                rawText={structuurAlgemeen.text?.join(" ")}
+              />
+            </>
+          ) : (
             <>
               <p className="al">
-                {" "}
                 <BwbRawText
                   id={`${id}_rawText`}
                   key={`${id}_rawText`}
                   rawText={structuurAlgemeen.text?.join(" ")}
                 />
-              </p>{" "}
+              </p>
             </>
           );
+        }
+
         return (
           <>
             <BwbRawText

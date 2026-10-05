@@ -8,7 +8,8 @@ import {
   type Wettekst,
 } from "../../api";
 import BwbRegelingTekst from "./bwb-regeling-tekst";
-import { Alert, CircularProgress, Box } from "@mui/material";
+import { Alert, CircularProgress, Box, Button } from "@mui/material";
+import HistoryIcon from "@mui/icons-material/History";
 import BwbWettekst from "./bwb-wettekst";
 import BwbBijlage from "./bwb-bijlage";
 import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
@@ -19,6 +20,7 @@ import BwbVerdrag from "./bwb-verdrag";
 import { BwbToestandContext } from "./bwb-toestand-context";
 import Footer from "../page/footer";
 import SideBar from "../page/side-bar";
+import BwbExpressionsModal from "./bwb-expressions-modal";
 
 interface BwbPreviewContentProps {
   bwbId: string;
@@ -48,6 +50,7 @@ export function BwbPreviewContent({
     undefined,
   );
   const [loading, setLoading] = useState(true);
+  const [expressionsOpen, setExpressionsOpen] = useState(false);
   const [error, setError] = useState<{
     message: string;
     technical?: string;
@@ -151,12 +154,38 @@ export function BwbPreviewContent({
             <SideBar toc={toc}></SideBar>
             <div id="content">
               <div id="regeling">
-                <Heading level={1}>
-                  <BwbRawText
-                    id="citeerTitel"
-                    rawText={citeerTitel?.text?.join(" ")}
-                  />
-                </Heading>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 2,
+                  }}
+                >
+                  <Heading level={1}>
+                    <BwbRawText
+                      id="citeerTitel"
+                      rawText={citeerTitel?.text?.join(" ")}
+                    />
+                  </Heading>
+                  {!isToekomstig && (
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<HistoryIcon />}
+                      onClick={() => setExpressionsOpen(true)}
+                      sx={{ flexShrink: 0 }}
+                    >
+                      Andere versies
+                    </Button>
+                  )}
+                </Box>
+                <BwbExpressionsModal
+                  bwbId={bwbId}
+                  expression={expression}
+                  open={expressionsOpen}
+                  onClose={() => setExpressionsOpen(false)}
+                />
                 <div className="wetgeving">
                   {verdragen?.map((verdrag) => (
                     <BwbVerdrag bwbId={bwbId} verdrag={verdrag} />

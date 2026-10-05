@@ -37,6 +37,10 @@ function BwbHoofdstuk({
           <BwbAfdeling key={key} id={key} afdeling={afdeling}></BwbAfdeling>
         );
       })}
+      {hoofdstuk.artikel?.map((artikel: Artikel, index: number) => {
+        const key = `${id}_artikel${index}`;
+        return <BwbArtikel key={key} id={key} artikel={artikel}></BwbArtikel>;
+      })}
       {hoofdstuk.paragraaf?.map((paragraaf: Paragraaf, index: number) => {
         const key = `${id}_paragraaf${index}`;
         return (
@@ -47,10 +51,6 @@ function BwbHoofdstuk({
             paragraaf={paragraaf}
           ></BwbParagraaf>
         );
-      })}
-      {hoofdstuk.artikel?.map((artikel: Artikel, index: number) => {
-        const key = `${id}_artikel${index}`;
-        return <BwbArtikel key={key} id={key} artikel={artikel}></BwbArtikel>;
       })}
       {hoofdstuk.titeldeel?.map((titeldeel, index: number) => {
         const key = `${id}_titeldeel${index}`;
