@@ -84,3 +84,74 @@ export async function getToestand(
   }
   return parseToestand(await response.text());
 }
+
+export type ManifestExpression = {
+  /** Expression label, e.g. `2023-02-22_0`. */
+  label: string;
+  datumInwerkingtreding?: string;
+  einddatum?: string;
+};
+
+export type Manifest = {
+  bwbId: string;
+  expressions: ManifestExpression[];
+};
+
+export function getManifestUrl(
+  bwbId: string,
+  baseUrl = WETTEN_REPOSITORY_BASE_URL,
+): string {
+  return `${baseUrl}/BWB/${encodeURIComponent(bwbId)}/manifest.xml`;
+}
+
+/** Parses a BWB work manifest. Expressions whose items are all deleted are skipped. */
+export function parseManifest(xml: string): Manifest {
+  const document = new DOMParser().parseFromString(xml, "application/xml");
+  const parseError = document.querySelector("parsererror");
+  if (parseError) {
+    throw new Error(`Invalid manifest XML: ${parseError.textContent}`);
+  }
+
+  const metadataValue = (element: Element, name: string) =>
+    element.querySelector(`:scope > metadata > ${name}`)?.textContent ??
+    undefined;
+
+  const expressions = Array.from(
+    document.documentElement.querySelectorAll(":scope > expression"),
+  )
+    .filter((expression) =>
+      Array.from(expression.querySelectorAll("item")).some(
+        (item) => item.getAttribute("_deleted") !== "true",
+      ),
+    )
+    .map((expression) => ({
+      label: expression.getAttribute("label") ?? "",
+      datumInwerkingtreding: metadataValue(
+        expression,
+        "datum_inwerkingtreding",
+      ),
+      einddatum: metadataValue(expression, "einddatum"),
+    }));
+
+  return {
+    bwbId: document.documentElement.getAttribute("label") ?? "",
+    expressions,
+  };
+}
+
+/** Fetches the manifest of a BWB work (e.g. `BWBR0001840`), listing its expressions. */
+export async function getManifest(
+  bwbId: string,
+  { baseUrl, signal }: GetToestandOptions = {},
+): Promise<Manifest> {
+  const response = await fetch(getManifestUrl(bwbId, baseUrl), {
+    headers: { Accept: "application/xml" },
+    signal,
+  });
+  if (!response.ok) {
+    throw new Error(
+      `Fetching manifest ${bwbId} failed: ${response.status} ${response.statusText}`,
+    );
+  }
+  return parseManifest(await response.text());
+}
