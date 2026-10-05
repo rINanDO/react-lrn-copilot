@@ -98,8 +98,9 @@
   width: 100%;
 }
 
+/* No [aria-hidden="true"] here: MUI sets it on its backdrop, its icons and,
+   while a modal is open, on #root, which would blank the page. */
 .is-hidden,
-[aria-hidden="true"],
 [hidden] {
   display: none !important;
 }
@@ -1426,6 +1427,13 @@ small {
   box-shadow: 0 0 0 2px #000 !important;
   outline: 1px solid #fff;
   outline-offset: 2px;
+}
+
+/* MUI text fields draw their own focus border around the field. */
+.MuiInputBase-input:focus {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  outline: none;
 }
 
 a {
