@@ -1,0 +1,27 @@
+/*
+ * The house style positions the sidebar absolutely over the full height of the
+ * page and relies on site JavaScript to keep it in view. Without that script,
+ * lay out sidebar and content as a grid and let the sidebar stick to the top
+ * of the viewport, scrolling its own contents when the TOC is taller.
+ *
+ * The selectors are deliberately more specific than those in generic.css,
+ * which is loaded after this file.
+ */
+@media only screen and (min-width: 50em) {
+  .container.columns.columns--sticky-sidebar {
+    display: grid;
+    grid-template-columns: 20em minmax(0, 1fr);
+    align-items: start;
+    padding-left: 1em;
+  }
+
+  .container.columns--sticky-sidebar > .columns--sticky-sidebar__sidebar {
+    position: sticky;
+    top: 1em;
+    bottom: auto;
+    left: auto;
+    width: auto;
+    max-height: calc(100vh - 2em);
+    overflow: auto;
+  }
+}

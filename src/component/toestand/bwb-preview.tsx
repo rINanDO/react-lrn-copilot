@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import type { Wetgeving } from "../../api";
 import {
   // getApiBeheerToestand,
   type Bijlage,
@@ -49,6 +50,7 @@ export function BwbPreviewContent({
   const [toc, setToc] = useState<Wettekst | RegelingTekst | undefined>(
     undefined,
   );
+  const [wetgeving, setWetgeving] = useState<Wetgeving | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [expressionsOpen, setExpressionsOpen] = useState(false);
   const [error, setError] = useState<{
@@ -59,6 +61,7 @@ export function BwbPreviewContent({
   useEffect(() => {
     getToestand(bwbId, expression, isToekomstig)
       .then((data) => {
+        setWetgeving(data?.wetgeving);
         setVerdragen(data?.wetgeving?.verdrag);
         setRegelingTekst(data?.wetgeving?.regeling?.regelingTekst);
         setBijlage(data?.wetgeving?.regeling?.bijlage);
@@ -151,7 +154,7 @@ export function BwbPreviewContent({
           <BwbToestandContext.Provider
             value={{ bwbId, expression, isToekomstig }}
           >
-            <SideBar toc={toc}></SideBar>
+            <SideBar wetgeving={wetgeving}></SideBar>
             <div id="content">
               <div id="regeling">
                 <Box
