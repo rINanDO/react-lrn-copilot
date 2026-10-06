@@ -1,4 +1,9 @@
-import type { Lijst, Plaatje } from "../../api";
+import {
+  isAlItem,
+  isLijstItem,
+  isPlaatjeItem,
+  type StructuurAlgemeenItem,
+} from "../../api";
 import BwbLijst from "./bwb-lijst";
 import BwbPlaatje from "./bwb-plaatje";
 import BwbRawText from "./bwb-raw-text";
@@ -9,7 +14,7 @@ function BwbStructuurAlgemeen({
   noParagraph,
 }: {
   id: string;
-  structuurAlgemeen: any;
+  structuurAlgemeen: StructuurAlgemeenItem;
   noParagraph?: boolean;
 }) {
   if (!structuurAlgemeen) {
@@ -19,24 +24,24 @@ function BwbStructuurAlgemeen({
   return (
     <>
       {(() => {
-        if (structuurAlgemeen.$element === "lijst")
+        if (isLijstItem(structuurAlgemeen))
           return (
             <BwbLijst
               id={`${id}_lijst`}
               key={`${id}_lijst`}
-              lijst={structuurAlgemeen as Lijst}
+              lijst={structuurAlgemeen}
             />
           );
 
-        if (structuurAlgemeen.$element === "plaatje")
+        if (isPlaatjeItem(structuurAlgemeen))
           return (
             <BwbPlaatje
               id={`${id}_plaatje`}
               key={`${id}_plaatje`}
-              plaatje={structuurAlgemeen as Plaatje}
+              plaatje={structuurAlgemeen}
             />
           );
-        if (structuurAlgemeen.$element === "al") {
+        if (isAlItem(structuurAlgemeen)) {
           return noParagraph ? (
             <>
               <BwbRawText

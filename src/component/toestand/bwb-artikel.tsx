@@ -2,7 +2,11 @@ import "./wetten.css";
 import BwbLid from "./bwb-lid";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 import BwbKop from "./bwb-kop";
-import type { Artikel } from "../../api";
+import {
+  isLijstItem,
+  type Artikel,
+  type StructuurAlgemeenItem,
+} from "../../api";
 
 function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
   const inwerkingtredingDatum =
@@ -41,33 +45,35 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
         return (
           <>
             <div className="artikel" id={artikelId}>
-              {artikel.structuurAlgemeen?.map(
-                (structuurAlgemeen: any, index) => {
-                  const structuurAlgemeenKey = `${id}_structuurAlgemeen${index}`;
-                  const isLijst =
-                    structuurAlgemeen?.li && structuurAlgemeen?.li.length > 0;
+              {(
+                artikel.structuurAlgemeen as
+                  | StructuurAlgemeenItem[]
+                  | null
+                  | undefined
+              )?.map((structuurAlgemeen, index) => {
+                const structuurAlgemeenKey = `${id}_structuurAlgemeen${index}`;
+                const isLijst = isLijstItem(structuurAlgemeen);
 
-                  return isLijst ? (
-                    <>
+                return isLijst ? (
+                  <>
+                    <BwbStructuurAlgemeen
+                      id={structuurAlgemeenKey}
+                      key={structuurAlgemeenKey}
+                      structuurAlgemeen={structuurAlgemeen}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <p className="al">
                       <BwbStructuurAlgemeen
                         id={structuurAlgemeenKey}
                         key={structuurAlgemeenKey}
                         structuurAlgemeen={structuurAlgemeen}
                       />
-                    </>
-                  ) : (
-                    <>
-                      <p className="al">
-                        <BwbStructuurAlgemeen
-                          id={structuurAlgemeenKey}
-                          key={structuurAlgemeenKey}
-                          structuurAlgemeen={structuurAlgemeen}
-                        />
-                      </p>
-                    </>
-                  );
-                },
-              )}
+                    </p>
+                  </>
+                );
+              })}
               {artikel.lid?.map((lid, index) => {
                 const key = `${id}_lid${index}`;
                 return <BwbLid key={key} id={key} lid={lid} />;

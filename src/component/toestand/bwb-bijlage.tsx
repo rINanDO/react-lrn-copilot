@@ -1,5 +1,10 @@
 import "./wetten.css";
-import type { Bijlage, Divisie, Table } from "../../api";
+import type {
+  Bijlage,
+  Divisie,
+  StructuurAlgemeenItem,
+  Table,
+} from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 import BwbTable from "./bwb-table";
 import BwbDivisie from "./bwb-divisie";
@@ -29,7 +34,12 @@ function BwbBijlage({ bijlage }: { bwbId?: string; bijlage?: Bijlage }) {
         </div>
         {!isVervallen && (
           <>
-            {bijlage.structuurAlgemeen?.map((structuurAlgemeen, index) => {
+            {(
+              bijlage.structuurAlgemeen as
+                | StructuurAlgemeenItem[]
+                | null
+                | undefined
+            )?.map((structuurAlgemeen, index) => {
               const key = `bijlage${index}`;
               return (
                 <BwbStructuurAlgemeen

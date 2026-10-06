@@ -1,6 +1,31 @@
 import { xmlSchema, type FieldDescriptor, type TypeDescriptor } from './xmlSchema.gen';
+import type { Al, Lijst, Plaatje } from './types.gen';
 
 type Model = Record<string, unknown>;
+
+/**
+ * Runtime shape of an entry in a `structuurAlgemeen` choice group (the
+ * generated types model these fields as `Array<unknown>`, see `convertElement`
+ * below). Tagged with `$element` so components can discriminate on it.
+ */
+export type StructuurAlgemeenItem =
+  | ({ $element: 'al' } & Al)
+  | ({ $element: 'lijst' } & Lijst)
+  | ({ $element: 'plaatje' } & Plaatje)
+  | ({ $element: string } & { text?: Array<string> | null });
+
+// Equality checks on `$element` don't narrow `StructuurAlgemeenItem` on their
+// own, since the fallback member's `$element` is a plain `string` rather than
+// a literal - these type guards narrow explicitly instead.
+export function isAlItem(item: StructuurAlgemeenItem): item is { $element: 'al' } & Al {
+  return item.$element === 'al';
+}
+export function isLijstItem(item: StructuurAlgemeenItem): item is { $element: 'lijst' } & Lijst {
+  return item.$element === 'lijst';
+}
+export function isPlaatjeItem(item: StructuurAlgemeenItem): item is { $element: 'plaatje' } & Plaatje {
+  return item.$element === 'plaatje';
+}
 
 const IGNORED_ATTRIBUTE_PREFIXES = ['xmlns', 'xsi:'];
 

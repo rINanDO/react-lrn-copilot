@@ -547,3 +547,6 @@ export type {
   WijzigLidGroepWritable,
   WijzigLidWritable,
 } from "./types.gen";
+
+export type { StructuurAlgemeenItem } from "./xmlToModel";
+export { isAlItem, isLijstItem, isPlaatjeItem } from "./xmlToModel";

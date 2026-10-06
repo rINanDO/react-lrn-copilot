@@ -1,4 +1,4 @@
-import type { Li } from "../../api";
+import type { Li, StructuurAlgemeenItem } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 
 function BwbLi({ id, li }: { id: string; li: Li }) {
@@ -6,14 +6,17 @@ function BwbLi({ id, li }: { id: string; li: Li }) {
     return <></>;
   }
 
-  const structuurAlgemeen = li?.structuurAlgemeen;
+  const structuurAlgemeen = li?.structuurAlgemeen as
+    | StructuurAlgemeenItem[]
+    | null
+    | undefined;
   return (
     <>
       <li className="li">
         <p className="labeled">
           <span className="ol">{li.liNr}</span>
           {structuurAlgemeen?.map(
-            (liStructuurAlgemeen: any, liIndex: number) => {
+            (liStructuurAlgemeen, liIndex: number) => {
               return (
                 <>
                   <BwbStructuurAlgemeen

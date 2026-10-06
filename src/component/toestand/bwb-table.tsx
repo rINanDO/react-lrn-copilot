@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import "./wetten.css";
-import type { Table, Tgroup } from "../../api";
+import type { StructuurAlgemeenItem, Table, Tgroup } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 
 function BwbTable({ table }: { bwbId?: string; table?: Table }) {
@@ -24,17 +24,20 @@ function BwbTable({ table }: { bwbId?: string; table?: Table }) {
                         key={cellIndex}
                       >
                         <p className="al">
-                          {entry.structuurAlgemeen?.map(
-                            (liStructuurAlgemeen: any, liIndex: number) => {
-                              return (
-                                <BwbStructuurAlgemeen
-                                  id={`table_header_${liIndex}`}
-                                  key={`table_header_${liIndex}`}
-                                  structuurAlgemeen={liStructuurAlgemeen}
-                                />
-                              );
-                            },
-                          )}
+                          {(
+                            entry.structuurAlgemeen as
+                              | StructuurAlgemeenItem[]
+                              | null
+                              | undefined
+                          )?.map((liStructuurAlgemeen, liIndex: number) => {
+                            return (
+                              <BwbStructuurAlgemeen
+                                id={`table_header_${liIndex}`}
+                                key={`table_header_${liIndex}`}
+                                structuurAlgemeen={liStructuurAlgemeen}
+                              />
+                            );
+                          })}
                         </p>
                       </th>
                     );
@@ -55,17 +58,20 @@ function BwbTable({ table }: { bwbId?: string; table?: Table }) {
                         key={cellIndex}
                       >
                         <p className="al">
-                          {entry.structuurAlgemeen?.map(
-                            (liStructuurAlgemeen: any, liIndex: number) => {
-                              return (
-                                <BwbStructuurAlgemeen
-                                  id={`table_body_${liIndex}`}
-                                  key={`table_body_${liIndex}`}
-                                  structuurAlgemeen={liStructuurAlgemeen}
-                                />
-                              );
-                            },
-                          )}
+                          {(
+                            entry.structuurAlgemeen as
+                              | StructuurAlgemeenItem[]
+                              | null
+                              | undefined
+                          )?.map((liStructuurAlgemeen, liIndex: number) => {
+                            return (
+                              <BwbStructuurAlgemeen
+                                id={`table_body_${liIndex}`}
+                                key={`table_body_${liIndex}`}
+                                structuurAlgemeen={liStructuurAlgemeen}
+                              />
+                            );
+                          })}
                         </p>
                       </td>
                     );

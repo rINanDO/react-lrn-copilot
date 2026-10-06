@@ -1,6 +1,6 @@
 import "./wetten.css";
 import BwbArtikel from "./bwb-artikel";
-import type { Divisie, Table } from "../../api";
+import type { Divisie, StructuurAlgemeenItem, Table } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 import BwbTable from "./bwb-table";
 import BwbKop from "./bwb-kop";
@@ -28,7 +28,9 @@ function BwbDivisie({ divisie }: { divisie?: Divisie }) {
           artikel={artikel}
         ></BwbArtikel>
       ))}
-      {divisie.structuurAlgemeen?.map((structuurAlgemeen, index) => {
+      {(
+        divisie.structuurAlgemeen as StructuurAlgemeenItem[] | null | undefined
+      )?.map((structuurAlgemeen, index) => {
         const key = `${divisie.id}_structuuralgemeen_${index}`;
         return (
           <BwbStructuurAlgemeen

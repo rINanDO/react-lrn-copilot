@@ -1,4 +1,4 @@
-import type { Lid } from "../../api";
+import { isLijstItem, type Lid, type StructuurAlgemeenItem } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 import BwbRawText from "./bwb-raw-text";
 import type { Table } from "../../api";
@@ -9,14 +9,18 @@ function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
     return <></>;
   }
 
+  const structuurAlgemeenList = lid.structuurAlgemeen as
+    | StructuurAlgemeenItem[]
+    | null
+    | undefined;
+
   return (
     <>
       <ul className={`list--law__unordered ${type ?? ""} whitespace-small`}>
         <li>
-          {lid.structuurAlgemeen?.map(
-            (structuurAlgemeen: any, index: number) => {
-              const isLijst =
-                structuurAlgemeen?.li && structuurAlgemeen?.li?.length > 0;
+          {structuurAlgemeenList?.map(
+            (structuurAlgemeen, index: number) => {
+              const isLijst = isLijstItem(structuurAlgemeen);
 
               if (isLijst) {
                 return (
