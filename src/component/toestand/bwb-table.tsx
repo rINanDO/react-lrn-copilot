@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import "./wetten.css";
 import type { Table, Tgroup } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
@@ -10,10 +11,10 @@ function BwbTable({ table }: { bwbId?: string; table?: Table }) {
   return (
     <>
       <table summary="tabel" className="table__regulation fullwidth">
-        {table?.tgroup.map((tgroup: Tgroup) => (
-          <>
-            {tgroup.thead?.row?.map((row) => (
-              <thead>
+        {table?.tgroup.map((tgroup: Tgroup, tgroupIndex: number) => (
+          <Fragment key={tgroupIndex}>
+            {tgroup.thead?.row?.map((row, rowIndex) => (
+              <thead key={rowIndex}>
                 <tr className="table-head">
                   {row.entry?.map((entry, cellIndex) => {
                     return (
@@ -43,7 +44,10 @@ function BwbTable({ table }: { bwbId?: string; table?: Table }) {
             ))}
             <tbody>
               {tgroup.tbody?.row?.map((row, index) => (
-                <tr className={`tr-rowsep ${index % 2 === 0 ? "even" : "odd"}`}>
+                <tr
+                  key={index}
+                  className={`tr-rowsep ${index % 2 === 0 ? "even" : "odd"}`}
+                >
                   {row.entry?.map((entry, cellIndex) => {
                     return (
                       <td
@@ -69,7 +73,7 @@ function BwbTable({ table }: { bwbId?: string; table?: Table }) {
                 </tr>
               ))}
             </tbody>
-          </>
+          </Fragment>
         ))}
       </table>
     </>

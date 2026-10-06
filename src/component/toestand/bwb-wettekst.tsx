@@ -34,7 +34,7 @@ function BwbWettekst({
       {wettekst?.hoofdstuk?.map((hoofdstuk, index) => {
         const key = `hoofdstuk${index}`;
         return (
-          <div id={key}>
+          <div key={key} id={key}>
             <BwbHoofdstuk
               key={key}
               id={key}
@@ -48,7 +48,7 @@ function BwbWettekst({
       {wettekst?.boek?.map((boek, index) => {
         const key = boek.id ?? `boek_${index}`;
         return (
-          <div className="boek">
+          <div key={key} className="boek">
             <BwbBoek key={key} bwbId={bwbId} boek={boek} />
           </div>
         );
