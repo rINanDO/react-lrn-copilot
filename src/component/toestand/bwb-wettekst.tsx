@@ -57,7 +57,7 @@ function BwbWettekst({
         const key = `paragraaf_${index}`;
         return (
           <div className="paragraaf" key={key}>
-            <BwbParagraaf key={key} bwbId={bwbId} paragraaf={paragraaf} />
+            <BwbParagraaf key={key} paragraaf={paragraaf} />
           </div>
         );
       })}

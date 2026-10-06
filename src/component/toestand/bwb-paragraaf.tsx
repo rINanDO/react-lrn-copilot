@@ -1,14 +1,10 @@
-import type { Artikel, Hoofdstuk, Paragraaf, SubParagraaf } from "../../api";
+import type { Artikel, Paragraaf, SubParagraaf } from "../../api";
 import BwbArtikel from "./bwb-artikel";
 import BwbSubParagraaf from "./bwb-subparagraaf";
 
 function BwbParagraaf({
-  bwbId,
-  hoofdstuk,
   paragraaf,
 }: {
-  bwbId?: string;
-  hoofdstuk?: Hoofdstuk;
   paragraaf?: Paragraaf;
 }) {
   if (!paragraaf) {
@@ -41,8 +37,6 @@ function BwbParagraaf({
           (subparagraaf: SubParagraaf, index: number) => (
             <BwbSubParagraaf
               key={`${paragraaf.id}_subparagraaf_${index}`}
-              bwbId={bwbId}
-              hoofdstuk={hoofdstuk}
               subparagraaf={subparagraaf}
             />
           ),

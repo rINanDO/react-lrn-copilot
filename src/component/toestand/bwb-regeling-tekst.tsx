@@ -18,11 +18,7 @@ function BwbRegelingTekst({
   return (
     <>
       {paragrafen.map((paragraaf: Paragraaf, index: number) => (
-        <BwbParagraaf
-          key={`paragraaf_${index}`}
-          bwbId={bwbId}
-          paragraaf={paragraaf}
-        />
+        <BwbParagraaf key={`paragraaf_${index}`} paragraaf={paragraaf} />
       ))}
       {regelingTekst?.hoofdstuk?.map((hoofdstuk, index) => {
         const key = hoofdstuk.id ?? `hoofdstuk_${index}`;
@@ -41,9 +37,7 @@ function BwbRegelingTekst({
         <BwbArtikel key={`artikel_${index}`} artikel={artikel} />
       ))}
 
-      {lastParagraaf && (
-        <BwbParagraaf bwbId={bwbId} paragraaf={lastParagraaf} />
-      )}
+      {lastParagraaf && <BwbParagraaf paragraaf={lastParagraaf} />}
     </>
   );
 }

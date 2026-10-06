@@ -43,12 +43,7 @@ function BwbHoofdstuk({
       {hoofdstuk.paragraaf?.map((paragraaf: Paragraaf, index: number) => {
         const key = `${id}_paragraaf${index}`;
         return (
-          <BwbParagraaf
-            key={key}
-            bwbId={bwbId}
-            hoofdstuk={hoofdstuk}
-            paragraaf={paragraaf}
-          ></BwbParagraaf>
+          <BwbParagraaf key={key} paragraaf={paragraaf}></BwbParagraaf>
         );
       })}
       {hoofdstuk.titeldeel?.map((titeldeel, index: number) => {
