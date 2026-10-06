@@ -92,19 +92,19 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                 );
               }
               case "redactie":
-                return <>[Red: {encodeHTML(node.textContent)}]</>;
+                return <>[Red: {node.textContent}]</>;
               default:
                 return (
                   <>
                     <strong>
-                      * TODO {node.nodeName}: {encodeHTML(node.textContent)}
+                      * TODO {node.nodeName}: {node.textContent}
                     </strong>
                   </>
                 );
             }
             break;
         }
-        return <>{encodeHTML(node.textContent)}</>;
+        return <>{node.textContent}</>;
       })}
     </>
   );

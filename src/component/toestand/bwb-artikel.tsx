@@ -3,7 +3,6 @@ import BwbLid from "./bwb-lid";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 import BwbKop from "./bwb-kop";
 import type { Artikel } from "../../api";
-import { encodeHTML } from "./utils";
 
 function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
   const inwerkingtredingDatum =
@@ -29,9 +28,7 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
         {(() => {
           switch (publicatieEffect) {
             case "vervallen":
-              return (
-                <p>[Vervallen per {encodeHTML(inwerkingtredingDatum ?? "")}]</p>
-              );
+              return <p>[Vervallen per {inwerkingtredingDatum ?? ""}]</p>;
             default:
               return <></>;
           }
