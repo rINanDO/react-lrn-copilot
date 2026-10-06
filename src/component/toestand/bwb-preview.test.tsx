@@ -27,7 +27,7 @@ describe('BwbPreviewContent', () => {
   it('calls the API with the correct parameters', async () => {
     render(<BwbPreviewContent bwbId="BWBR0001840" expression="2026-01-01_0" isToekomstig={false} />);
     await waitFor(() => {
-      expect(wettenRepository.getToestand).toHaveBeenCalledWith('BWBR0001840', '2026-01-01_0');
+      expect(wettenRepository.getToestand).toHaveBeenCalledWith('BWBR0001840', '2026-01-01_0', false);
     });
   });
 
@@ -40,7 +40,9 @@ describe('BwbPreviewContent', () => {
   it('renders the citeertitel once loaded', async () => {
     render(<BwbPreviewContent bwbId="BWBR0001840" expression="2026-01-01_0" isToekomstig={true} />);
     await waitFor(() => {
-      expect(screen.getByText('Wet op de belastingen')).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { level: 1, name: 'Wet op de belastingen' }),
+      ).toBeInTheDocument();
     });
   });
 });
