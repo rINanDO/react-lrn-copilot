@@ -13,11 +13,11 @@ function BwbRegelingTekst({
   if (!regelingTekst) {
     return <></>;
   }
-  const paragraaf = [...(regelingTekst.paragraaf ?? [])];
-  const lastParagraaf = paragraaf.pop();
+  const paragrafen = [...(regelingTekst.paragraaf ?? [])];
+  const lastParagraaf = paragrafen.pop();
   return (
     <>
-      {regelingTekst?.paragraaf?.map((paragraaf: Paragraaf, index: number) => (
+      {paragrafen.map((paragraaf: Paragraaf, index: number) => (
         <BwbParagraaf
           key={`paragraaf_${index}`}
           bwbId={bwbId}
