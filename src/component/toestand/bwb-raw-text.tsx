@@ -33,7 +33,7 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                   const nadrukType = node.getAttribute("type") ?? "";
                   const textContent = node.textContent ?? "";
                   switch (nadrukType) {
-                    case "bold": // TODO Check type
+                    case "vet":
                       return (
                         <>
                           <strong>{textContent}</strong>
@@ -43,6 +43,12 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                       return (
                         <>
                           <em>{textContent}</em>
+                        </>
+                      );
+                    case "ondlijn":
+                      return (
+                        <>
+                          <u>{textContent}</u>
                         </>
                       );
                     default:
