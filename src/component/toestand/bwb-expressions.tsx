@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { generatePath, Link, Navigate, useParams } from "react-router-dom";
 import { Alert, Box, CircularProgress } from "@mui/material";
 import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
@@ -6,6 +7,7 @@ import { isGeldend, useManifestExpressions } from "./use-manifest-expressions";
 
 export function BwbExpressionsContent({ bwbId }: { bwbId: string }) {
   const { expressions, loading, error } = useManifestExpressions(bwbId);
+  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   if (loading) {
     return (
@@ -22,8 +24,6 @@ export function BwbExpressionsContent({ bwbId }: { bwbId: string }) {
       </Alert>
     );
   }
-
-  const today = new Date().toISOString().slice(0, 10);
 
   // Go straight to the version in force today. Expressions are newest first,
   // so if several qualify the most recent wins.

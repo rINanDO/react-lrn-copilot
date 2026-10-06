@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { generatePath, Link } from "react-router-dom";
 import { appRoutes } from "../../router/routes";
 import type { ManifestExpression } from "../../api/wettenRepository";
@@ -104,7 +104,7 @@ function BwbExpressionsList({
     const index = expressions.findIndex((item) => item.label === expression);
     return index < 0 ? 1 : Math.floor(index / PAGE_SIZE) + 1;
   });
-  const today = new Date().toISOString().slice(0, 10);
+  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   const normalizedQuery = query.trim().toLowerCase();
   const filtered = normalizedQuery
