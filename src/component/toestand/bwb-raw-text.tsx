@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { encodeHTML } from "./utils";
 
 function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
@@ -21,10 +22,10 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
   // TODO
   return (
     <>
-      {nodes.map((node) => {
+      {nodes.map((node, index) => {
         switch (node.nodeType) {
           case Node.TEXT_NODE:
-            return <>{node.textContent}</>;
+            return <Fragment key={index}>{node.textContent}</Fragment>;
           default:
             switch (node.nodeName) {
               case "nadruk":
@@ -34,21 +35,21 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                   switch (nadrukType) {
                     case "vet":
                       return (
-                        <>
+                        <Fragment key={index}>
                           <strong>{textContent}</strong>
-                        </>
+                        </Fragment>
                       );
                     case "cur":
                       return (
-                        <>
+                        <Fragment key={index}>
                           <em>{textContent}</em>
-                        </>
+                        </Fragment>
                       );
                     case "ondlijn":
                       return (
-                        <>
+                        <Fragment key={index}>
                           <u>{textContent}</u>
-                        </>
+                        </Fragment>
                       );
                     default:
                       // Handle default case
@@ -63,7 +64,7 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                 switch (reeks) {
                   case "Celex":
                     return (
-                      <>
+                      <Fragment key={index}>
                         <a
                           href={`https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${doc}`}
                           rel="nofollow"
@@ -71,11 +72,11 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                         >
                           {text}
                         </a>
-                      </>
+                      </Fragment>
                     );
                   default:
                     return (
-                      <>
+                      <Fragment key={index}>
                         <a
                           href={`https://wetten.overheid.nl/${doc}`}
                           rel="nofollow"
@@ -83,7 +84,7 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                         >
                           {text}
                         </a>
-                      </>
+                      </Fragment>
                     );
                 }
               }
@@ -91,25 +92,25 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                 const doc = node.getAttribute("bwb-ng-variabel-deel") ?? "";
                 const text = node.textContent ?? "";
                 return (
-                  <>
+                  <Fragment key={index}>
                     <a href={`#${doc}`}>{text}</a>
-                  </>
+                  </Fragment>
                 );
               }
               case "redactie":
-                return <>[Red: {node.textContent}]</>;
+                return <Fragment key={index}>[Red: {node.textContent}]</Fragment>;
               default:
                 return (
-                  <>
+                  <Fragment key={index}>
                     <strong>
                       * TODO {node.nodeName}: {node.textContent}
                     </strong>
-                  </>
+                  </Fragment>
                 );
             }
             break;
         }
-        return <>{node.textContent}</>;
+        return <Fragment key={index}>{node.textContent}</Fragment>;
       })}
     </>
   );

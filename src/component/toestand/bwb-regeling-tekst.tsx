@@ -27,7 +27,7 @@ function BwbRegelingTekst({
       {regelingTekst?.hoofdstuk?.map((hoofdstuk, index) => {
         const key = hoofdstuk.id ?? `hoofdstuk_${index}`;
         return (
-          <div className="hoofdstuk">
+          <div className="hoofdstuk" key={key}>
             <BwbHoofdstuk
               id={key}
               key={key}

@@ -183,8 +183,12 @@ export function BwbPreviewContent({
                   onClose={() => setExpressionsOpen(false)}
                 />
                 <div className="wetgeving">
-                  {verdragen?.map((verdrag) => (
-                    <BwbVerdrag bwbId={bwbId} verdrag={verdrag} />
+                  {verdragen?.map((verdrag, index) => (
+                    <BwbVerdrag
+                      key={verdrag.id ?? index}
+                      bwbId={bwbId}
+                      verdrag={verdrag}
+                    />
                   ))}
                   <BwbRegelingTekst
                     bwbId={bwbId}

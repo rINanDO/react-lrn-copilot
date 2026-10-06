@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { isLijstItem, type Lid, type StructuurAlgemeenItem } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 import BwbRawText from "./bwb-raw-text";
@@ -24,18 +25,18 @@ function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
 
               if (isLijst) {
                 return (
-                  <>
+                  <Fragment key={`${id}_lid${index}`}>
                     <BwbStructuurAlgemeen
                       id={`${id}_lid${index}`}
                       key={`${id}_lid${index}`}
                       structuurAlgemeen={structuurAlgemeen}
                     />
-                  </>
+                  </Fragment>
                 );
               }
               if (index === 0) {
                 return (
-                  <p className="lid labeled">
+                  <p className="lid labeled" key={`${id}_lid${index}`}>
                     <span className="lidnr">
                       <BwbRawText
                         id={`${id}_lidnr${index}`}

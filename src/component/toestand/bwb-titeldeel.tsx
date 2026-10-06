@@ -32,7 +32,7 @@ function BwbTiteldeel({
       {titeldeel.hoofdstuk?.map((hoofdstuk) => {
         const hoofdstukId = `${id ?? ""}_Hoofdstuk${hoofdstuk.id ?? ""}`;
         return (
-          <div className="hoofdstuk" id={hoofdstukId}>
+          <div className="hoofdstuk" id={hoofdstukId} key={hoofdstukId}>
             <BwbHoofdstuk
               id={hoofdstukId}
               key={hoofdstukId}
@@ -45,7 +45,7 @@ function BwbTiteldeel({
       {titeldeel.paragraaf?.map((paragraaf: Paragraaf) => {
         const paragraafId = `${id ?? ""}_Paragraaf${paragraaf.id ?? ""}`;
         return (
-          <div className="paragraaf" id={paragraafId}>
+          <div className="paragraaf" id={paragraafId} key={paragraafId}>
             <BwbParagraaf key={paragraafId} paragraaf={paragraaf} />
           </div>
         );
@@ -53,7 +53,7 @@ function BwbTiteldeel({
       {titeldeel.artikel?.map((artikel: Artikel) => {
         const artikelId = `${id ?? ""}_Artikel${artikel.id ?? ""}`;
         return (
-          <div className="artikel" id={artikelId}>
+          <div className="artikel" id={artikelId} key={artikelId}>
             <BwbArtikel id={artikelId} key={artikelId} artikel={artikel} />
           </div>
         );
@@ -62,7 +62,7 @@ function BwbTiteldeel({
       {titeldeel.afdeling?.map((afdeling: Afdeling) => {
         const afdelingId = `${id ?? ""}_Afdeling${afdeling.id ?? ""}`;
         return (
-          <div className="afdeling" id={afdelingId}>
+          <div className="afdeling" id={afdelingId} key={afdelingId}>
             <BwbAfdeling id={afdelingId} key={afdelingId} afdeling={afdeling} />
           </div>
         );
