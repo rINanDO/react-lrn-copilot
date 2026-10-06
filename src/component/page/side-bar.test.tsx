@@ -1,9 +1,14 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import SideBar from './side-bar';
-import type { Wettekst } from '../../api';
+import type { Wetgeving, Wettekst } from '../../api';
 
 afterEach(cleanup);
+
+/** Wraps a `Wettekst`-shaped TOC into the `Wetgeving` SideBar actually takes. */
+function wetgevingWith(wettekst: Wettekst): Wetgeving {
+  return { regeling: { regelingTekst: wettekst } } as unknown as Wetgeving;
+}
 
 const toc = {
   hoofdstuk: [
@@ -17,7 +22,7 @@ const toc = {
 
 describe('SideBar', () => {
   it('folds and unfolds the nested items', () => {
-    render(<SideBar toc={toc} />);
+    render(<SideBar wetgeving={wetgevingWith(toc)} />);
     const toggle = screen.getByRole('button', { name: 'Toon onderliggende' });
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     expect(document.getElementById('lijst-H1')).not.toBeVisible();
@@ -29,7 +34,7 @@ describe('SideBar', () => {
   });
 
   it('shows no toggle for items without children', () => {
-    render(<SideBar toc={toc} />);
+    render(<SideBar wetgeving={wetgevingWith(toc)} />);
     fireEvent.click(screen.getByRole('button', { name: 'Toon onderliggende' }));
     expect(screen.getAllByRole('button')).toHaveLength(1);
   });
@@ -43,17 +48,15 @@ describe('SideBar', () => {
     });
     render(
       <SideBar
-        toc={
-          {
-            hoofdstuk: [
-              {
-                id: 'H2',
-                kop: { label: ['Hoofdstuk'], nr: [{ text: ['2'] }] },
-                paragraaf: [paragraaf('1', ['2.51', '2.52']), paragraaf('2', ['2.54'])],
-              },
-            ],
-          } as unknown as Wettekst
-        }
+        wetgeving={wetgevingWith({
+          hoofdstuk: [
+            {
+              id: 'H2',
+              kop: { label: ['Hoofdstuk'], nr: [{ text: ['2'] }] },
+              paragraaf: [paragraaf('1', ['2.51', '2.52']), paragraaf('2', ['2.54'])],
+            },
+          ],
+        } as unknown as Wettekst)}
       />,
     );
     expect(screen.getByText('(Artikelen 2.51-2.54)')).toBeInTheDocument();
