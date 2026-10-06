@@ -1,14 +1,26 @@
 {
   "name": "wetten-react",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Web application for browsing Dutch legislation (BWB) publications from officiele-overheidspublicaties.nl.",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://dev.azure.com/rinando/BWB/_git/wetten-react"
+  },
   "type": "module",
+  "engines": {
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+  },
+  "packageManager": "npm@11.4.1",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
+    "ci": "npm run typecheck && npm run lint && npm run test && npm run build",
     "generate:xml-schema": "node scripts/generate-xml-schema.mjs"
   },
   "dependencies": {
