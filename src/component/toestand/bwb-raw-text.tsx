@@ -1,4 +1,3 @@
-import type { Artikel } from "../../api";
 import { encodeHTML } from "./utils";
 
 function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {

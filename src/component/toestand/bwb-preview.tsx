@@ -47,9 +47,6 @@ export function BwbPreviewContent({
   const [citeerTitel, setCiteerTitel] = useState<Citeertitel | undefined>(
     undefined,
   );
-  const [toc, setToc] = useState<Wettekst | RegelingTekst | undefined>(
-    undefined,
-  );
   const [wetgeving, setWetgeving] = useState<Wetgeving | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [expressionsOpen, setExpressionsOpen] = useState(false);
@@ -67,10 +64,6 @@ export function BwbPreviewContent({
         setBijlage(data?.wetgeving?.regeling?.bijlage);
         setWettekst(data?.wetgeving?.wetBesluit?.wettekst);
         setCiteerTitel(data?.wetgeving?.citeertitel);
-        setToc(
-          data?.wetgeving?.regeling?.regelingTekst ??
-            data?.wetgeving?.wetBesluit?.wettekst,
-        );
       })
       .catch((err: unknown) => {
         let message = "Er is een fout opgetreden bij het laden van de preview.";
