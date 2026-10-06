@@ -16,7 +16,8 @@ function BwbBijlage({ bijlage }: { bwbId?: string; bijlage?: Bijlage }) {
   }
   const isVervallen =
     bijlage.status === 1 &&
-    bijlage.metaData?.brondata?.[0]?.inwerkingtreding?.publicatie?.effect === 2;
+    bijlage.metaData?.brondata?.[0]?.inwerkingtreding?.publicatie?.effect ===
+      "vervallen";
   const vervallenPer = isVervallen
     ? bijlage.metaData?.brondata?.[0]?.inwerkingtreding?.inwerkingtredingDatum?.text?.join(
         " ",
