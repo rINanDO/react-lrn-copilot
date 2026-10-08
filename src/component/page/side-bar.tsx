@@ -133,8 +133,10 @@ function TocItem({
         )}
       </a>
       {hasChildren && (
+        // Folded children are not rendered at all: large regelingen have
+        // thousands of TOC entries, most of which are never unfolded.
         <ul id={listId} hidden={!expanded}>
-          {children}
+          {expanded && children}
         </ul>
       )}
     </li>

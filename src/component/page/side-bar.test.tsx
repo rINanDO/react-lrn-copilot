@@ -33,6 +33,14 @@ describe('SideBar', () => {
     expect(document.getElementById('lijst-H1')).toBeVisible();
   });
 
+  it('does not render folded items until they are unfolded', () => {
+    render(<SideBar wetgeving={wetgevingWith(toc)} />);
+    expect(document.getElementById('TOC_A1')).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Toon onderliggende' }));
+    expect(document.getElementById('TOC_A1')).toBeInTheDocument();
+  });
+
   it('shows no toggle for items without children', () => {
     render(<SideBar wetgeving={wetgevingWith(toc)} />);
     fireEvent.click(screen.getByRole('button', { name: 'Toon onderliggende' }));
@@ -60,6 +68,7 @@ describe('SideBar', () => {
       />,
     );
     expect(screen.getByText('(Artikelen 2.51-2.54)')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Toon onderliggende' }));
     expect(screen.getByText('(Artikelen 2.51-2.52)')).toBeInTheDocument();
     expect(screen.getByText('(Artikel 2.54)')).toBeInTheDocument();
   });
