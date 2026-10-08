@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Artikel, Wettekst, Paragraaf } from "../../api";
 
 import BwbTiteldeel from "./bwb-titeldeel";
@@ -72,4 +73,4 @@ function BwbWettekst({
     </>
   );
 }
-export default BwbWettekst;
+export default memo(BwbWettekst);

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Verdrag, Verdragtekst } from "../../api";
 import BwbVerdragTekst from "./bwb-verdrag-tekst";
 
@@ -28,4 +29,4 @@ function BwbVerdrag({
     </>
   );
 }
-export default BwbVerdrag;
+export default memo(BwbVerdrag);

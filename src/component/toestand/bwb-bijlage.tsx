@@ -1,3 +1,4 @@
+import { memo } from "react";
 import "./wetten.css";
 import type {
   Bijlage,
@@ -68,4 +69,4 @@ function BwbBijlage({ bijlage }: { bwbId?: string; bijlage?: Bijlage }) {
   );
 }
 
-export default BwbBijlage;
+export default memo(BwbBijlage);

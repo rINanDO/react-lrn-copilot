@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Artikel, Paragraaf, RegelingTekst } from "../../api";
 import BwbArtikel from "./bwb-artikel";
 import BwbHoofdstuk from "./bwb-hoofdstuk";
@@ -41,4 +42,4 @@ function BwbRegelingTekst({
     </>
   );
 }
-export default BwbRegelingTekst;
+export default memo(BwbRegelingTekst);

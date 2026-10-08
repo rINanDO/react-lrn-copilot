@@ -1,6 +1,6 @@
 import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
 import type { Kop, Hoofdstuk, Artikel, Paragraaf, Wetgeving } from "../../api";
-import { Children, useId, useState, type ReactNode } from "react";
+import { Children, memo, useId, useState, type ReactNode } from "react";
 import BwbRawText from "../toestand/bwb-raw-text";
 import "./side-bar.css";
 
@@ -166,4 +166,4 @@ function SideBar({ wetgeving }: { wetgeving: Wetgeving | undefined }) {
   );
 }
 
-export default SideBar;
+export default memo(SideBar);
