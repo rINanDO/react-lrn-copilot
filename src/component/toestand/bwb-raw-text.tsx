@@ -5,6 +5,11 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
   if (!rawText) {
     return <></>;
   }
+  // Without tags or entities the text parses to itself; skip the DOMParser,
+  // which is costly when repeated for every fragment of a large regeling.
+  if (!/[<&]/.test(rawText)) {
+    return <>{rawText}</>;
+  }
   const raw = `<?xml version="1.0" encoding="UTF-8" ?><root>${rawText}</root>`;
   const parser = new DOMParser();
   const xml = parser.parseFromString(raw, "text/xml");
