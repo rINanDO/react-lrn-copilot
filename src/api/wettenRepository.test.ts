@@ -1,5 +1,9 @@
-import { describe, expect, it } from 'vitest';
-import { parseManifest } from './wettenRepository';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { getToestand, parseManifest, type ToestandProgress } from './wettenRepository';
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 const manifestXml = `<?xml version="1.0" encoding="utf-8"?>
 <work label="BWBR0001840" _latestItem="2005-02-08_0/xml/BWBR0001840_2005-02-08_0.xml">
@@ -44,6 +48,37 @@ describe('parseManifest', () => {
       '2025-01-01_4',
       '2025-01-01_10',
       '2026-02-21_0',
+    ]);
+  });
+});
+
+describe('getToestand', () => {
+  it('reports the download progress before parsing', async () => {
+    const chunks = ['<toestand bwb-id="BWBR0041330">', '</toestand>'].map((chunk) =>
+      new TextEncoder().encode(chunk),
+    );
+    const total = chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        chunks.forEach((chunk) => controller.enqueue(chunk));
+        controller.close();
+      },
+    });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(new Response(body, { headers: { 'Content-Length': String(total) } })),
+    );
+
+    const progress: ToestandProgress[] = [];
+    const toestand = await getToestand('BWBR0041330', '2026-07-01_0', false, {
+      onProgress: (update) => progress.push(update),
+    });
+
+    expect(toestand.bwbId).toBe('BWBR0041330');
+    expect(progress).toEqual([
+      { phase: 'downloading', loaded: chunks[0].byteLength, total },
+      { phase: 'downloading', loaded: total, total },
+      { phase: 'parsing', loaded: total, total },
     ]);
   });
 });

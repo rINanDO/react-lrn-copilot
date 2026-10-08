@@ -9,13 +9,22 @@ import {
   type Wettekst,
 } from "../../api";
 import BwbRegelingTekst from "./bwb-regeling-tekst";
-import { Alert, CircularProgress, Box, Button } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  LinearProgress,
+  Typography,
+} from "@mui/material";
 import HistoryIcon from "@mui/icons-material/History";
 import BwbWettekst from "./bwb-wettekst";
 import BwbBijlage from "./bwb-bijlage";
 import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
 import BwbRawText from "./bwb-raw-text";
-import { getToestand } from "../../api/wettenRepository";
+import {
+  getToestand,
+  type ToestandProgress,
+} from "../../api/wettenRepository";
 import type { Verdrag } from "../../api";
 import BwbVerdrag from "./bwb-verdrag";
 import { BwbToestandContext } from "./bwb-toestand-context";
@@ -49,6 +58,9 @@ export function BwbPreviewContent({
   );
   const [wetgeving, setWetgeving] = useState<Wetgeving | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState<ToestandProgress | undefined>(
+    undefined,
+  );
   const [expressionsOpen, setExpressionsOpen] = useState(false);
   const [error, setError] = useState<{
     message: string;
@@ -56,7 +68,7 @@ export function BwbPreviewContent({
   } | null>(null);
 
   useEffect(() => {
-    getToestand(bwbId, expression, isToekomstig)
+    getToestand(bwbId, expression, isToekomstig, { onProgress: setProgress })
       .then((data) => {
         setWetgeving(data?.wetgeving);
         setVerdragen(data?.wetgeving?.verdrag);
@@ -106,11 +118,7 @@ export function BwbPreviewContent({
   }, [bwbId, expression, isToekomstig]);
 
   if (loading) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <BwbLoadingProgress progress={progress} />;
   }
 
   if (error) {
@@ -206,6 +214,42 @@ export function BwbPreviewContent({
         <Footer></Footer>
       </div>
     </>
+  );
+}
+
+function formatMegabytes(bytes: number): string {
+  return (bytes / 1_000_000).toLocaleString("nl-NL", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
+}
+
+function BwbLoadingProgress({ progress }: { progress?: ToestandProgress }) {
+  const total =
+    progress?.total && progress.loaded <= progress.total
+      ? progress.total
+      : undefined;
+  let label = "Regeling laden…";
+  if (progress?.phase === "parsing") {
+    label = "Regeling verwerken…";
+  } else if (progress) {
+    label = total
+      ? `Regeling laden… ${formatMegabytes(progress.loaded)} van ${formatMegabytes(total)} MB`
+      : `Regeling laden… ${formatMegabytes(progress.loaded)} MB`;
+  }
+  const determinate = progress?.phase === "downloading" && total;
+
+  return (
+    <Box sx={{ maxWidth: 480, mx: "auto", py: 4, px: 2 }}>
+      <Typography variant="body2" sx={{ mb: 1 }} role="status">
+        {label}
+      </Typography>
+      <LinearProgress
+        aria-label="Voortgang laden regeling"
+        variant={determinate ? "determinate" : "indeterminate"}
+        value={determinate ? (progress.loaded / total) * 100 : undefined}
+      />
+    </Box>
   );
 }
 
