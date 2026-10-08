@@ -20,7 +20,7 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
   }
   const kopKey = `${id}_artikel_kop`;
   return (
-    <>
+    <div className="bwb-artikel">
       <div className="article__header--law artikel">
         <BwbKop
           id={kopKey}
@@ -82,7 +82,7 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
           </>
         );
       })()}
-    </>
+    </div>
   );
 }
 

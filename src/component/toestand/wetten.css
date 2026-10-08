@@ -95,3 +95,11 @@
 .form__element.radiogroup.inline-group label + label {
   margin-left: 0.5em;
 }
+
+/* Lets the browser skip layout and paint of off-screen articles; large
+   regelingen (e.g. BWBR0041330) have thousands of them. Anchors and
+   find-in-page still reach skipped content. */
+.bwb-artikel {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
