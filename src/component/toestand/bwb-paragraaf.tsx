@@ -1,48 +1,37 @@
 import type { Artikel, Paragraaf, SubParagraaf } from "../../api";
+import BwbKop from "./bwb-kop";
 import BwbArtikel from "./bwb-artikel";
+import BwbStructuurtekst from "./bwb-structuurtekst";
 import BwbSubParagraaf from "./bwb-subparagraaf";
 
-function BwbParagraaf({
-  paragraaf,
-}: {
-  paragraaf?: Paragraaf;
-}) {
+function BwbParagraaf({ paragraaf }: { paragraaf?: Paragraaf }) {
   if (!paragraaf) {
     return <></>;
   }
-
-  // const sectionId = paragraaf?.toText(paragraafItem?.["@bwb-ng-variabel-deel"])
-  //     .replace(/\//g, "_")
-  //     .substring(1);
-  const nr = paragraaf.kop?.nr?.map((nr) => nr.text?.join(" ")).join(" ");
-  const titel = paragraaf.kop?.titel
-    ?.map((titel) => titel.text?.join(" "))
-    .join(" ");
-  const label = paragraaf.kop?.label?.join(" ");
-  const volledigeTitel = `${label} ${nr} ${titel}`.trim();
-
+  const kopId = `${paragraaf.id}_kop`;
   return (
-    <>
-      <div className="paragraaf">
-        <div className="article__header--law paragraaf">
-          <h4>{volledigeTitel}</h4>
-        </div>
-        {paragraaf.artikel?.map((artikel: Artikel, index: number) => (
-          <BwbArtikel
-            key={`${paragraaf.id}_artikel_${index}`}
-            artikel={artikel}
-          />
-        ))}
-        {paragraaf.subParagraaf?.map(
-          (subparagraaf: SubParagraaf, index: number) => (
-            <BwbSubParagraaf
-              key={`${paragraaf.id}_subparagraaf_${index}`}
-              subparagraaf={subparagraaf}
-            />
-          ),
-        )}
+    <div className="paragraaf">
+      <div className="article__header--law paragraaf">
+        <BwbKop id={kopId} headingLevel={4} kop={paragraaf.kop} />
       </div>
-    </>
+      <BwbStructuurtekst
+        structuurtekst={paragraaf.structuurtekst}
+      ></BwbStructuurtekst>
+      {paragraaf.artikel?.map((artikel: Artikel, index: number) => (
+        <BwbArtikel
+          key={`${paragraaf.id}_artikel_${index}`}
+          artikel={artikel}
+        />
+      ))}
+      {paragraaf.subParagraaf?.map(
+        (subparagraaf: SubParagraaf, index: number) => (
+          <BwbSubParagraaf
+            key={`${paragraaf.id}_subparagraaf_${index}`}
+            subparagraaf={subparagraaf}
+          />
+        ),
+      )}
+    </div>
   );
 }
 
