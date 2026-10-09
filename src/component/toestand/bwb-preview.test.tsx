@@ -3,7 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BwbPreviewContent } from './bwb-preview';
 import * as wettenRepository from '../../api/wettenRepository';
 
-vi.mock('../../api/wettenRepository', () => ({
+vi.mock('../../api/wettenRepository', async (importOriginal) => ({
+  ...(await importOriginal<typeof wettenRepository>()),
   getToestand: vi.fn(),
 }));
 
@@ -29,6 +30,7 @@ describe('BwbPreviewContent', () => {
     await waitFor(() => {
       expect(wettenRepository.getToestand).toHaveBeenCalledWith('BWBR0001840', '2026-01-01_0', false, {
         onProgress: expect.any(Function),
+        signal: expect.any(AbortSignal),
       });
     });
   });
