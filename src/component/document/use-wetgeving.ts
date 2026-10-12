@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import type { Wetgeving } from "../../api";
 import type { FetchOptions, LoadProgress } from "../../api/repository";
 
@@ -37,6 +37,7 @@ export function useWetgeving(
   // Tagged with the document it belongs to, so a change of inputs reads as
   // loading straight away instead of showing the previous document.
   const [state, setState] = useState<{ key: string; value: WetgevingState }>();
+  const startLoad = useEffectEvent(load);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -44,7 +45,7 @@ export function useWetgeving(
     const update = (value: WetgevingState) => {
       if (!signal.aborted) setState({ key, value });
     };
-    load({
+    startLoad({
       onProgress: (progress) => update({ status: "loading", progress }),
       signal,
     })
@@ -53,7 +54,6 @@ export function useWetgeving(
         update({ status: "error", error: toLoadError(err) }),
       );
     return () => controller.abort();
-    // `key` identifies the inputs `load` closes over.
   }, [key]);
 
   return state?.key === key ? state.value : { status: "loading" };
