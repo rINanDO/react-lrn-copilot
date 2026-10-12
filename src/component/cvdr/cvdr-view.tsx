@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getCvdrUrl } from "../../api/cvdrRepository";
 import { useCvdr } from "./use-cvdr";
 import DocumentTitle from "../document/document-title";
@@ -7,12 +7,15 @@ import DocumentView from "../document/document-view";
 interface CvdrViewProps {
   cvdrId: string;
   expression: string;
+  /** Text to highlight, from the `q` query-string parameter. */
+  highlightQuery?: string | null;
 }
 
 /** A CVDR regeling, the `<cvdr>` root of its XML, rendered with the element components it shares with BWB. */
 export function CvdrView({
   cvdrId,
   expression,
+  highlightQuery,
 }: CvdrViewProps) {
   const state = useCvdr(cvdrId, expression);
   return (
@@ -20,6 +23,7 @@ export function CvdrView({
       state={state}
       documentUrl={getCvdrUrl(cvdrId, expression)}
       fileName={`${cvdrId}_${expression}.xml`}
+      highlightQuery={highlightQuery}
       renderHeader={(wetgeving) => (
         <DocumentTitle citeertitel={wetgeving?.citeertitel} />
       )}
@@ -30,6 +34,7 @@ export function CvdrView({
 /** Route page showing the CVDR regeling named by the URL. */
 function CvdrPage() {
   const params = useParams();
+  const [searchParams] = useSearchParams();
   const cvdrId = params.cvdr ?? "";
   const expression = params.expression ?? "";
 
@@ -38,6 +43,7 @@ function CvdrPage() {
       key={`${cvdrId}:${expression}`}
       cvdrId={cvdrId}
       expression={expression}
+      highlightQuery={searchParams.get("q")}
     />
   );
 }

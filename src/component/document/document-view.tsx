@@ -1,7 +1,8 @@
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import type { Wetgeving } from "../../api";
 import { DocumentContext } from "./document-context";
 import type { WetgevingState } from "./use-wetgeving";
+import { useQueryHighlight } from "./use-query-highlight";
 import LoadingProgress from "./loading-progress";
 import LoadError from "./load-error";
 import WetgevingView from "../elements/wetgeving-view";
@@ -15,6 +16,8 @@ interface DocumentViewProps {
   fileName: string;
   /** The heading above the regeling text. */
   renderHeader: (wetgeving: Wetgeving | undefined) => ReactNode;
+  /** Text to highlight in the title and regeling text, from the `q` parameter. */
+  highlightQuery?: string | null;
 }
 
 /** A loaded BWB or CVDR document: download link, table of contents and regeling text. */
@@ -23,7 +26,11 @@ function DocumentView({
   documentUrl,
   fileName,
   renderHeader,
+  highlightQuery,
 }: DocumentViewProps) {
+  const regelingRef = useRef<HTMLDivElement>(null);
+  useQueryHighlight(regelingRef, highlightQuery, state.status === "loaded");
+
   if (state.status === "loading") {
     return <LoadingProgress progress={state.progress} />;
   }
@@ -39,7 +46,7 @@ function DocumentView({
         <DocumentContext.Provider value={{ documentUrl }}>
           <SideBar wetgeving={wetgeving} />
           <div id="content">
-            <div id="regeling">
+            <div id="regeling" ref={regelingRef}>
               {renderHeader(wetgeving)}
               <WetgevingView wetgeving={wetgeving} />
             </div>
