@@ -1,7 +1,7 @@
 import { Alert, Box } from "@mui/material";
-import type { ToestandLoadError } from "./use-toestand";
+import type { WetgevingLoadError } from "./use-wetgeving";
 
-function BwbLoadError({ error }: { error: ToestandLoadError }) {
+function LoadError({ error }: { error: WetgevingLoadError }) {
   return (
     <Alert severity="error" sx={{ m: 2 }}>
       {error.message}
@@ -23,4 +23,4 @@ function BwbLoadError({ error }: { error: ToestandLoadError }) {
   );
 }
 
-export default BwbLoadError;
+export default LoadError;

@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { toLoadError, useToestand } from './use-toestand';
+import { useToestand } from './use-toestand';
 import * as bwbRepository from '../../api/bwbRepository';
 
 vi.mock('../../api/bwbRepository', () => ({
@@ -79,14 +79,5 @@ describe('useToestand with changing inputs', () => {
     rerender({ expression: 'new' });
     expect(result.current).toEqual({ status: 'loading' });
     expect(signals[0]?.aborted).toBe(true);
-  });
-});
-
-describe('toLoadError', () => {
-  it('uses the generic message with technical detail for non-errors', () => {
-    expect(toLoadError('boom')).toEqual({
-      message: 'Er is een fout opgetreden bij het laden van de preview.',
-      technical: 'boom',
-    });
   });
 });

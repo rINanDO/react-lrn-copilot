@@ -1,13 +1,8 @@
 import { useParams } from "react-router-dom";
 import { getToestandUrl } from "../../api/bwbRepository";
-import { BwbToestandContext } from "./bwb-toestand-context";
 import { useToestand } from "./use-toestand";
-import BwbLoadingProgress from "./bwb-loading-progress";
-import BwbLoadError from "./bwb-load-error";
 import BwbToestandHeader from "./bwb-toestand-header";
-import WetgevingView from "../elements/wetgeving-view";
-import Footer from "../page/footer";
-import SideBar from "../page/side-bar";
+import DocumentView from "../document/document-view";
 
 interface BwbPreviewContentProps {
   bwbId: string;
@@ -20,40 +15,21 @@ export function BwbPreviewContent({
   expression,
   isToekomstig,
 }: BwbPreviewContentProps) {
-  const toestand = useToestand(bwbId, expression, isToekomstig);
-
-  if (toestand.status === "loading") {
-    return <BwbLoadingProgress progress={toestand.progress} />;
-  }
-  if (toestand.status === "error") {
-    return <BwbLoadError error={toestand.error} />;
-  }
-
-  const { wetgeving } = toestand;
-  const documentUrl = getToestandUrl(bwbId, expression, isToekomstig);
+  const state = useToestand(bwbId, expression, isToekomstig);
   return (
-    <div className="preview">
-      <a href={documentUrl}>
-        {bwbId}_{expression}.xml
-      </a>
-      <div className="container columns columns--sticky-sidebar row">
-        <BwbToestandContext.Provider value={{ documentUrl }}>
-          <SideBar wetgeving={wetgeving} />
-          <div id="content">
-            <div id="regeling">
-              <BwbToestandHeader
-                bwbId={bwbId}
-                expression={expression}
-                isToekomstig={isToekomstig}
-                citeertitel={wetgeving?.citeertitel}
-              />
-              <WetgevingView wetgeving={wetgeving} />
-            </div>
-          </div>
-        </BwbToestandContext.Provider>
-      </div>
-      <Footer />
-    </div>
+    <DocumentView
+      state={state}
+      documentUrl={getToestandUrl(bwbId, expression, isToekomstig)}
+      fileName={`${bwbId}_${expression}.xml`}
+      renderHeader={(wetgeving) => (
+        <BwbToestandHeader
+          bwbId={bwbId}
+          expression={expression}
+          isToekomstig={isToekomstig}
+          citeertitel={wetgeving?.citeertitel}
+        />
+      )}
+    />
   );
 }
 

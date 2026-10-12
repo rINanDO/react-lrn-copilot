@@ -1,9 +1,9 @@
 import type { Plaatje } from "../../api";
 import { getIllustratieUrl } from "../../api/repository";
-import { useBwbToestand } from "../toestand/bwb-toestand-context";
+import { useDocumentContext } from "../document/document-context";
 
 function PlaatjeView({ id, plaatje }: { id: string; plaatje?: Plaatje }) {
-  const toestand = useBwbToestand();
+  const toestand = useDocumentContext();
   const illustratie = plaatje?.illustratie;
   if (!toestand || !illustratie?.naam) {
     return <></>;

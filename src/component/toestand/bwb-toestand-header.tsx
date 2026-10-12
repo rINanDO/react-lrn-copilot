@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Box, Button } from "@mui/material";
 import HistoryIcon from "@mui/icons-material/History";
-import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
 import type { Citeertitel } from "../../api";
-import RawText from "../elements/raw-text";
+import DocumentTitle from "../document/document-title";
 import BwbExpressionsModal from "./bwb-expressions-modal";
 
 interface BwbToestandHeaderProps {
@@ -32,9 +31,7 @@ function BwbToestandHeader({
           gap: 2,
         }}
       >
-        <Heading level={1}>
-          <RawText id="citeerTitel" rawText={citeertitel?.text?.join(" ")} />
-        </Heading>
+        <DocumentTitle citeertitel={citeertitel} />
         {!isToekomstig && (
           <Button
             variant="outlined"

@@ -1,59 +1,29 @@
 import { useParams } from "react-router-dom";
-import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
 import { getCvdrUrl } from "../../api/cvdrRepository";
-import { BwbToestandContext } from "./bwb-toestand-context";
-import { useCvdr } from "./use-toestand";
-import BwbLoadingProgress from "./bwb-loading-progress";
-import BwbLoadError from "./bwb-load-error";
-import RawText from "../elements/raw-text";
-import WetgevingView from "../elements/wetgeving-view";
-import Footer from "../page/footer";
-import SideBar from "../page/side-bar";
+import { useCvdr } from "./use-cvdr";
+import DocumentTitle from "../document/document-title";
+import DocumentView from "../document/document-view";
 
 interface CvdrPreviewContentProps {
   cvdrId: string;
   expression: string;
 }
 
-/** A CVDR regeling, rendered with the BWB components its body shares. */
+/** A CVDR regeling, rendered with the element components it shares with BWB. */
 export function CvdrPreviewContent({
   cvdrId,
   expression,
 }: CvdrPreviewContentProps) {
-  const cvdr = useCvdr(cvdrId, expression);
-
-  if (cvdr.status === "loading") {
-    return <BwbLoadingProgress progress={cvdr.progress} />;
-  }
-  if (cvdr.status === "error") {
-    return <BwbLoadError error={cvdr.error} />;
-  }
-
-  const { wetgeving } = cvdr;
-  const documentUrl = getCvdrUrl(cvdrId, expression);
+  const state = useCvdr(cvdrId, expression);
   return (
-    <div className="preview">
-      <a href={documentUrl}>
-        {cvdrId}_{expression}.xml
-      </a>
-      <div className="container columns columns--sticky-sidebar row">
-        <BwbToestandContext.Provider value={{ documentUrl }}>
-          <SideBar wetgeving={wetgeving} />
-          <div id="content">
-            <div id="regeling">
-              <Heading level={1}>
-                <RawText
-                  id="citeerTitel"
-                  rawText={wetgeving?.citeertitel?.text?.join(" ")}
-                />
-              </Heading>
-              <WetgevingView wetgeving={wetgeving} />
-            </div>
-          </div>
-        </BwbToestandContext.Provider>
-      </div>
-      <Footer />
-    </div>
+    <DocumentView
+      state={state}
+      documentUrl={getCvdrUrl(cvdrId, expression)}
+      fileName={`${cvdrId}_${expression}.xml`}
+      renderHeader={(wetgeving) => (
+        <DocumentTitle citeertitel={wetgeving?.citeertitel} />
+      )}
+    />
   );
 }
 

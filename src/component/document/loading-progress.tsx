@@ -8,7 +8,7 @@ function formatMegabytes(bytes: number): string {
   });
 }
 
-function BwbLoadingProgress({ progress }: { progress?: LoadProgress }) {
+function LoadingProgress({ progress }: { progress?: LoadProgress }) {
   const total =
     progress?.total && progress.loaded <= progress.total
       ? progress.total
@@ -37,4 +37,4 @@ function BwbLoadingProgress({ progress }: { progress?: LoadProgress }) {
   );
 }
 
-export default BwbLoadingProgress;
+export default LoadingProgress;
