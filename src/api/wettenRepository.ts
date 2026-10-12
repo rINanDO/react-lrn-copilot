@@ -1,4 +1,4 @@
-import type { Toestand } from "./types.gen";
+import type { Intitule, Regeling, Toestand, Wetgeving } from "./types.gen";
 import { mapElement } from "./xmlToModel";
 
 export const WETTEN_REPOSITORY_BASE_URL =
@@ -31,19 +31,24 @@ export function getToestandUrl(
   return `${baseUrl}/${path}/${id}/${expr}/xml/${id}_${expr}.xml`;
 }
 
-/** URL of an illustration (e.g. `247668.png`), stored next to the toestand XML. */
-export function getIllustratieUrl(
-  bwbId: string,
+/** URL of a CVDR regeling (e.g. `CVDR744131`, expression `2`). */
+export function getCvdrUrl(
+  cvdrId: string,
   expression: string,
-  naam: string,
-  isToekomstig: boolean = false,
   baseUrl = WETTEN_REPOSITORY_BASE_URL,
 ): string {
-  const path = isToekomstig ? "BWBTT" : "BWB";
-  return `${baseUrl}/${path}/${encodeURIComponent(bwbId)}/${encodeURIComponent(expression)}/xml/${encodeURIComponent(naam)}`;
+  const id = encodeURIComponent(cvdrId);
+  const expr = encodeURIComponent(expression);
+  return `${baseUrl}/CVDR/${id}/${expr}/xml/${id}_${expr}.xml`;
 }
 
-export function parseToestand(xml: string): Toestand {
+/** URL of an illustration (e.g. `247668.png`), stored next to the XML at `documentUrl`. */
+export function getIllustratieUrl(documentUrl: string, naam: string): string {
+  return new URL(encodeURIComponent(naam), documentUrl).href;
+}
+
+/** Parses XML whose text elements (`al`, `titel`, ...) are kept as raw inner XML. */
+function parseXmlDocument(xml: string, description: string): Document {
   const document = new DOMParser().parseFromString(xml, "application/xml");
   replaceElementsByText("al", document);
   replaceElementsByText("tussenkop", document);
@@ -53,9 +58,37 @@ export function parseToestand(xml: string): Toestand {
 
   const parseError = document.querySelector("parsererror");
   if (parseError) {
-    throw new Error(`Invalid toestand XML: ${parseError.textContent}`);
+    throw new Error(`Invalid ${description} XML: ${parseError.textContent}`);
   }
+  return document;
+}
+
+export function parseToestand(xml: string): Toestand {
+  const document = parseXmlDocument(xml, "toestand");
   return mapElement(document.documentElement, "Toestand") as Toestand;
+}
+
+/**
+ * Parses a CVDR regeling into a `Wetgeving`. Its body uses the BWB elements
+ * (`regeling`, `hoofdstuk`, `artikel`, ...); the title comes from the metadata.
+ */
+export function parseCvdr(xml: string): Wetgeving {
+  const document = parseXmlDocument(xml, "CVDR");
+  const root = document.documentElement;
+  const child = (parent: Element | null | undefined, name: string) =>
+    Array.from(parent?.children ?? []).find((element) => element.localName === name);
+  const owmskern = child(child(root, "meta"), "owmskern");
+  const body = child(root, "body");
+  const intitule = child(body, "intitule");
+  const regeling = child(body, "regeling");
+  const title = child(owmskern, "title")?.textContent ?? "";
+
+  return {
+    id: child(owmskern, "identifier")?.textContent ?? "",
+    citeertitel: { text: [title] },
+    intitule: (intitule ? mapElement(intitule, "Intitule") : {}) as Intitule,
+    regeling: regeling ? (mapElement(regeling, "Regeling") as Regeling) : undefined,
+  } as Wetgeving;
 }
 
 /** Replaces the content of every `elementTag` element by a single text node holding its inner XML. */
@@ -78,28 +111,53 @@ export async function getToestand(
   bwbId: string,
   expression: string,
   isToekomstig: boolean = false,
-  { baseUrl, signal, onProgress }: GetToestandOptions = {},
+  { baseUrl, ...options }: GetToestandOptions = {},
 ): Promise<Toestand> {
-  const response = await fetch(
+  const xml = await fetchXml(
     getToestandUrl(bwbId, expression, isToekomstig, baseUrl),
-    {
-      headers: { Accept: "application/xml" },
-      signal,
-    },
+    `toestand ${bwbId} ${expression}`,
+    options,
   );
+  return parseToestand(xml);
+}
+
+/** Fetches a CVDR regeling (e.g. `CVDR744131`, `2`) and maps it to a `Wetgeving`. */
+export async function getCvdr(
+  cvdrId: string,
+  expression: string,
+  { baseUrl, ...options }: GetToestandOptions = {},
+): Promise<Wetgeving> {
+  const xml = await fetchXml(
+    getCvdrUrl(cvdrId, expression, baseUrl),
+    `CVDR ${cvdrId} ${expression}`,
+    options,
+  );
+  return parseCvdr(xml);
+}
+
+/** Downloads XML, reporting progress; resolves once it is ready to be parsed. */
+async function fetchXml(
+  url: string,
+  description: string,
+  { signal, onProgress }: Omit<GetToestandOptions, "baseUrl">,
+): Promise<string> {
+  const response = await fetch(url, {
+    headers: { Accept: "application/xml" },
+    signal,
+  });
   if (!response.ok) {
     throw new Error(
-      `Fetching toestand ${bwbId} ${expression} failed: ${response.status} ${response.statusText}`,
+      `Fetching ${description} failed: ${response.status} ${response.statusText}`,
     );
   }
   if (!onProgress) {
-    return parseToestand(await response.text());
+    return response.text();
   }
   const { text, loaded, total } = await readWithProgress(response, onProgress);
   onProgress({ phase: "parsing", loaded, total });
   // Parsing blocks the main thread; let the "parsing" state paint first.
   await afterPaint();
-  return parseToestand(text);
+  return text;
 }
 
 async function readWithProgress(

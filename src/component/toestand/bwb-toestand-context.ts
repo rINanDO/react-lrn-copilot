@@ -1,10 +1,9 @@
 import { createContext, useContext } from "react";
 
-/** Identifies the toestand being rendered, for resources stored next to its XML. */
+/** Identifies the document being rendered, for resources stored next to its XML. */
 export type BwbToestandContextValue = {
-  bwbId: string;
-  expression: string;
-  isToekomstig: boolean;
+  /** URL of the document's XML. */
+  documentUrl: string;
 };
 
 export const BwbToestandContext = createContext<

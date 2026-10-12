@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { appRoutes } from "./routes";
 import BwbPreview from "../component/toestand/bwb-preview";
 import BwbExpressions from "../component/toestand/bwb-expressions";
+import CvdrPreview from "../component/toestand/cvdr-preview";
 
 export const router = createBrowserRouter([
   {
@@ -13,6 +14,11 @@ export const router = createBrowserRouter([
     path: appRoutes.bwb,
     handle: { title: "Wetten" },
     element: <BwbPreview isToekomstig={false} />,
+  },
+  {
+    path: appRoutes.cvdr,
+    handle: { title: "Wetten" },
+    element: <CvdrPreview />,
   },
   {
     path: appRoutes.bwbtt,

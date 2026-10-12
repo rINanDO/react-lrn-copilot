@@ -30,13 +30,14 @@ export function BwbPreviewContent({
   }
 
   const { wetgeving } = toestand;
+  const documentUrl = getToestandUrl(bwbId, expression, isToekomstig);
   return (
     <div className="preview">
-      <a href={getToestandUrl(bwbId, expression, isToekomstig)}>
+      <a href={documentUrl}>
         {bwbId}_{expression}.xml
       </a>
       <div className="container columns columns--sticky-sidebar row">
-        <BwbToestandContext.Provider value={{ bwbId, expression, isToekomstig }}>
+        <BwbToestandContext.Provider value={{ documentUrl }}>
           <SideBar wetgeving={wetgeving} />
           <div id="content">
             <div id="regeling">

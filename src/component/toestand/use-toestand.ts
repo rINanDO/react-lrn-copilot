@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Wetgeving } from "../../api";
 import {
+  getCvdr,
   getToestand,
+  type GetToestandOptions,
   type ToestandProgress,
 } from "../../api/wettenRepository";
 
@@ -32,9 +34,33 @@ export function useToestand(
   expression: string,
   isToekomstig: boolean,
 ): ToestandState {
-  const key = `${bwbId}:${expression}:${isToekomstig}`;
-  // Tagged with the toestand it belongs to, so a change of inputs reads as
-  // loading straight away instead of showing the previous toestand.
+  return useWetgeving(`${bwbId}:${expression}:${isToekomstig}`, (options) =>
+    getToestand(bwbId, expression, isToekomstig, options).then(
+      (toestand) => toestand?.wetgeving,
+    ),
+  );
+}
+
+/** Loads a CVDR regeling, like `useToestand`. */
+export function useCvdr(cvdrId: string, expression: string): ToestandState {
+  return useWetgeving(`CVDR:${cvdrId}:${expression}`, (options) =>
+    getCvdr(cvdrId, expression, options),
+  );
+}
+
+/**
+ * Runs `load` whenever `key` changes, reporting download progress. Aborts the
+ * request when the key changes or on unmount. `key` must identify everything
+ * `load` depends on.
+ */
+function useWetgeving(
+  key: string,
+  load: (
+    options: Required<Pick<GetToestandOptions, "onProgress" | "signal">>,
+  ) => Promise<Wetgeving | undefined>,
+): ToestandState {
+  // Tagged with the document it belongs to, so a change of inputs reads as
+  // loading straight away instead of showing the previous document.
   const [state, setState] = useState<{ key: string; value: ToestandState }>();
 
   useEffect(() => {
@@ -43,18 +69,17 @@ export function useToestand(
     const update = (value: ToestandState) => {
       if (!signal.aborted) setState({ key, value });
     };
-    getToestand(bwbId, expression, isToekomstig, {
+    load({
       onProgress: (progress) => update({ status: "loading", progress }),
       signal,
     })
-      .then((toestand) =>
-        update({ status: "loaded", wetgeving: toestand?.wetgeving }),
-      )
+      .then((wetgeving) => update({ status: "loaded", wetgeving }))
       .catch((err: unknown) =>
         update({ status: "error", error: toLoadError(err) }),
       );
     return () => controller.abort();
-  }, [key, bwbId, expression, isToekomstig]);
+    // `key` identifies the inputs `load` closes over.
+  }, [key]);
 
   return state?.key === key ? state.value : { status: "loading" };
 }

@@ -14,12 +14,7 @@ function BwbPlaatje({ id, plaatje }: { id: string; plaatje?: Plaatje }) {
       <div key={`${id}`} className="plaatje">
         <img
           id={illustratie.id ?? undefined}
-          src={getIllustratieUrl(
-            toestand.bwbId,
-            toestand.expression,
-            illustratie.naam,
-            toestand.isToekomstig,
-          )}
+          src={getIllustratieUrl(toestand.documentUrl, illustratie.naam)}
           width={illustratie.breedte}
           height={illustratie.hoogte}
           alt=""
