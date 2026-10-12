@@ -103,7 +103,16 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
                 );
               }
               case "redactie":
-                return <Fragment key={index}>[Red: {node.textContent}]</Fragment>;
+                return (
+                  <Fragment key={index}>[Red: {node.textContent}]</Fragment>
+                );
+              case "onderstreept":
+                return (
+                  <Fragment key={index}>
+                    <u>{node.textContent}</u>
+                  </Fragment>
+                );
+
               default:
                 return (
                   <Fragment key={index}>
