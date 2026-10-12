@@ -1,8 +1,8 @@
 import "./wetten.css";
 import type { StructuurAlgemeenItem, Structuurtekst } from "../../api";
-import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
+import StructuurAlgemeenView from "./structuur-algemeen-view";
 
-function BwbStructuurtekst({
+function StructuurtekstView({
   id,
   structuurtekst,
 }: {
@@ -21,10 +21,10 @@ function BwbStructuurtekst({
         return structuurAlgemeenList?.map((structuurAlgemeen, index) => {
           const structuurAlgemeenId = `${id}_structuurAlgemeen${index}`;
           return (
-            <BwbStructuurAlgemeen
+            <StructuurAlgemeenView
               structuurAlgemeen={structuurAlgemeen}
               id={structuurAlgemeenId}
-            ></BwbStructuurAlgemeen>
+            ></StructuurAlgemeenView>
           );
         });
       })()}
@@ -32,4 +32,4 @@ function BwbStructuurtekst({
   );
 }
 
-export default BwbStructuurtekst;
+export default StructuurtekstView;

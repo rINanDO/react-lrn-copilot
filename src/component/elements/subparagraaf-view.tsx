@@ -1,7 +1,7 @@
 import type { Artikel, SubParagraaf } from "../../api";
-import BwbArtikel from "./bwb-artikel";
+import ArtikelView from "./artikel-view";
 
-function BwbSubParagraaf({
+function SubparagraafView({
   subparagraaf,
 }: {
   subparagraaf?: SubParagraaf;
@@ -31,14 +31,14 @@ function BwbSubParagraaf({
           <h4>{volledigeTitel}</h4>
         </div>
         {subparagraaf.artikel?.map((artikel: Artikel, index: number) => (
-          <BwbArtikel
+          <ArtikelView
             key={`${subparagraaf.id}_artikel_${index}`}
             artikel={artikel}
           />
         ))}
         {subparagraaf.subParagraaf?.map(
           (subparagraaf: SubParagraaf, index: number) => (
-            <BwbSubParagraaf
+            <SubparagraafView
               key={`${subparagraaf.id}_subparagraaf_${index}`}
               subparagraaf={subparagraaf}
             />
@@ -49,4 +49,4 @@ function BwbSubParagraaf({
   );
 }
 
-export default BwbSubParagraaf;
+export default SubparagraafView;

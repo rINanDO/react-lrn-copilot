@@ -1,13 +1,13 @@
 import { memo } from "react";
 import type { Artikel, Wettekst, Paragraaf } from "../../api";
 
-import BwbTiteldeel from "./bwb-titeldeel";
-import BwbHoofdstuk from "./bwb-hoofdstuk";
-import BwbParagraaf from "./bwb-paragraaf";
-import BwbArtikel from "./bwb-artikel";
-import BwbBoek from "./bwb-boek";
+import TiteldeelView from "./titeldeel-view";
+import HoofdstukView from "./hoofdstuk-view";
+import ParagraafView from "./paragraaf-view";
+import ArtikelView from "./artikel-view";
+import BoekView from "./boek-view";
 
-function BwbWettekst({
+function WettekstView({
   wettekst,
 }: {
   wettekst: Wettekst | undefined;
@@ -21,7 +21,7 @@ function BwbWettekst({
         const key = `titeldeel${index}`;
         return (
           <div className="titeldeel" key={key} id={key}>
-            <BwbTiteldeel
+            <TiteldeelView
               id={key}
               key={key}
               titeldeel={titeldeel}
@@ -33,7 +33,7 @@ function BwbWettekst({
         const key = `hoofdstuk${index}`;
         return (
           <div key={key} id={key}>
-            <BwbHoofdstuk
+            <HoofdstukView
               key={key}
               id={key}
               hoofdstuk={hoofdstuk}
@@ -46,7 +46,7 @@ function BwbWettekst({
         const key = boek.id ?? `boek_${index}`;
         return (
           <div key={key} className="boek">
-            <BwbBoek key={key} boek={boek} />
+            <BoekView key={key} boek={boek} />
           </div>
         );
       })}
@@ -54,7 +54,7 @@ function BwbWettekst({
         const key = `paragraaf_${index}`;
         return (
           <div className="paragraaf" key={key}>
-            <BwbParagraaf key={key} paragraaf={paragraaf} />
+            <ParagraafView key={key} paragraaf={paragraaf} />
           </div>
         );
       })}
@@ -62,11 +62,11 @@ function BwbWettekst({
         const key = `artikel_${index}`;
         return (
           <div className="artikel" key={key}>
-            <BwbArtikel id={key} key={key} artikel={artikel} />
+            <ArtikelView id={key} key={key} artikel={artikel} />
           </div>
         );
       })}
     </>
   );
 }
-export default memo(BwbWettekst);
+export default memo(WettekstView);

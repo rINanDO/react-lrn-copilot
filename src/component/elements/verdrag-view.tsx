@@ -1,8 +1,8 @@
 import { memo } from "react";
 import type { Verdrag, Verdragtekst } from "../../api";
-import BwbVerdragTekst from "./bwb-verdrag-tekst";
+import VerdragTekstView from "./verdrag-tekst-view";
 
-function BwbVerdrag({
+function VerdragView({
   verdrag,
 }: {
   verdrag: Verdrag | undefined;
@@ -16,7 +16,7 @@ function BwbVerdrag({
         (verdragtekst: Verdragtekst, index: number) => {
           var key = `${verdrag.id}_item${index}`;
           return (
-            <BwbVerdragTekst
+            <VerdragTekstView
               key={key}
               verdragTekst={verdragtekst}
             />
@@ -26,4 +26,4 @@ function BwbVerdrag({
     </>
   );
 }
-export default memo(BwbVerdrag);
+export default memo(VerdragView);

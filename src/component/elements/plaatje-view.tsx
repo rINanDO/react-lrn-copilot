@@ -1,8 +1,8 @@
 import type { Plaatje } from "../../api";
 import { getIllustratieUrl } from "../../api/repository";
-import { useBwbToestand } from "./bwb-toestand-context";
+import { useBwbToestand } from "../toestand/bwb-toestand-context";
 
-function BwbPlaatje({ id, plaatje }: { id: string; plaatje?: Plaatje }) {
+function PlaatjeView({ id, plaatje }: { id: string; plaatje?: Plaatje }) {
   const toestand = useBwbToestand();
   const illustratie = plaatje?.illustratie;
   if (!toestand || !illustratie?.naam) {
@@ -23,4 +23,4 @@ function BwbPlaatje({ id, plaatje }: { id: string; plaatje?: Plaatje }) {
     </>
   );
 }
-export default BwbPlaatje;
+export default PlaatjeView;

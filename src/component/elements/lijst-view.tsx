@@ -1,7 +1,7 @@
 import type { Li, Lijst } from "../../api";
-import BwbLi from "./bwb-li";
+import LiView from "./li-view";
 
-function BwbLijst({ id, lijst }: { id: string; lijst: Lijst }) {
+function LijstView({ id, lijst }: { id: string; lijst: Lijst }) {
   if (!lijst) {
     return <></>;
   }
@@ -13,7 +13,7 @@ function BwbLijst({ id, lijst }: { id: string; lijst: Lijst }) {
       >
         {lijst.li.map((listItem: Li, index: number) => {
           return (
-            <BwbLi
+            <LiView
               id={`${id}_item${index}`}
               key={`${id}_item${index}`}
               li={listItem}
@@ -24,4 +24,4 @@ function BwbLijst({ id, lijst }: { id: string; lijst: Lijst }) {
     </>
   );
 }
-export default BwbLijst;
+export default LijstView;

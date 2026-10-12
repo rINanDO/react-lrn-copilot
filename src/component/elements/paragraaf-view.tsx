@@ -1,10 +1,10 @@
 import type { Artikel, Paragraaf, SubParagraaf } from "../../api";
-import BwbKop from "./bwb-kop";
-import BwbArtikel from "./bwb-artikel";
-import BwbStructuurtekst from "./bwb-structuurtekst";
-import BwbSubParagraaf from "./bwb-subparagraaf";
+import KopView from "./kop-view";
+import ArtikelView from "./artikel-view";
+import StructuurtekstView from "./structuurtekst-view";
+import SubparagraafView from "./subparagraaf-view";
 
-function BwbParagraaf({ paragraaf }: { paragraaf?: Paragraaf }) {
+function ParagraafView({ paragraaf }: { paragraaf?: Paragraaf }) {
   if (!paragraaf) {
     return <></>;
   }
@@ -12,20 +12,20 @@ function BwbParagraaf({ paragraaf }: { paragraaf?: Paragraaf }) {
   return (
     <div className="paragraaf">
       <div className="article__header--law paragraaf">
-        <BwbKop id={kopId} headingLevel={4} kop={paragraaf.kop} />
+        <KopView id={kopId} headingLevel={4} kop={paragraaf.kop} />
       </div>
-      <BwbStructuurtekst
+      <StructuurtekstView
         structuurtekst={paragraaf.structuurtekst}
-      ></BwbStructuurtekst>
+      ></StructuurtekstView>
       {paragraaf.artikel?.map((artikel: Artikel, index: number) => (
-        <BwbArtikel
+        <ArtikelView
           key={`${paragraaf.id}_artikel_${index}`}
           artikel={artikel}
         />
       ))}
       {paragraaf.subParagraaf?.map(
         (subparagraaf: SubParagraaf, index: number) => (
-          <BwbSubParagraaf
+          <SubparagraafView
             key={`${paragraaf.id}_subparagraaf_${index}`}
             subparagraaf={subparagraaf}
           />
@@ -35,4 +35,4 @@ function BwbParagraaf({ paragraaf }: { paragraaf?: Paragraaf }) {
   );
 }
 
-export default BwbParagraaf;
+export default ParagraafView;

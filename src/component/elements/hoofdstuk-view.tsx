@@ -1,12 +1,12 @@
 import "./wetten.css";
-import BwbArtikel from "./bwb-artikel";
-import BwbParagraaf from "./bwb-paragraaf";
+import ArtikelView from "./artikel-view";
+import ParagraafView from "./paragraaf-view";
 import type { Hoofdstuk, Paragraaf, Artikel } from "../../api";
-import BwbAfdeling from "./bwb-afdeling";
-import BwbKop from "./bwb-kop";
-import BwbTiteldeel from "./bwb-titeldeel";
+import AfdelingView from "./afdeling-view";
+import KopView from "./kop-view";
+import TiteldeelView from "./titeldeel-view";
 
-function BwbHoofdstuk({
+function HoofdstukView({
   id,
   hoofdstuk,
 }: {
@@ -20,7 +20,7 @@ function BwbHoofdstuk({
   return (
     <>
       <div className="article__header--law article__header--law--chapter">
-        <BwbKop
+        <KopView
           key={id}
           id={id}
           kop={hoofdstuk.kop}
@@ -31,31 +31,31 @@ function BwbHoofdstuk({
       {hoofdstuk.afdeling?.map((afdeling, index: number) => {
         const key = `${id}_afdeling${index}`;
         return (
-          <BwbAfdeling key={key} id={key} afdeling={afdeling}></BwbAfdeling>
+          <AfdelingView key={key} id={key} afdeling={afdeling}></AfdelingView>
         );
       })}
       {hoofdstuk.artikel?.map((artikel: Artikel, index: number) => {
         const key = `${id}_artikel${index}`;
-        return <BwbArtikel key={key} id={key} artikel={artikel}></BwbArtikel>;
+        return <ArtikelView key={key} id={key} artikel={artikel}></ArtikelView>;
       })}
       {hoofdstuk.paragraaf?.map((paragraaf: Paragraaf, index: number) => {
         const key = `${id}_paragraaf${index}`;
         return (
-          <BwbParagraaf key={key} paragraaf={paragraaf}></BwbParagraaf>
+          <ParagraafView key={key} paragraaf={paragraaf}></ParagraafView>
         );
       })}
       {hoofdstuk.titeldeel?.map((titeldeel, index: number) => {
         const key = `${id}_titeldeel${index}`;
         return (
-          <BwbTiteldeel
+          <TiteldeelView
             key={key}
             id={key}
             titeldeel={titeldeel}
-          ></BwbTiteldeel>
+          ></TiteldeelView>
         );
       })}
     </>
   );
 }
 
-export default BwbHoofdstuk;
+export default HoofdstukView;

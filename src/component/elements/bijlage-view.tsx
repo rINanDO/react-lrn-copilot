@@ -6,12 +6,12 @@ import type {
   StructuurAlgemeenItem,
   Table,
 } from "../../api";
-import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
-import BwbTable from "./bwb-table";
-import BwbDivisie from "./bwb-divisie";
+import StructuurAlgemeenView from "./structuur-algemeen-view";
+import TableView from "./table-view";
+import DivisieView from "./divisie-view";
 import { processKopTitle } from "./kop-processor";
 
-function BwbBijlage({ bijlage }: { bijlage?: Bijlage }) {
+function BijlageView({ bijlage }: { bijlage?: Bijlage }) {
   if (!bijlage) {
     return <></>;
   }
@@ -44,7 +44,7 @@ function BwbBijlage({ bijlage }: { bijlage?: Bijlage }) {
             )?.map((structuurAlgemeen, index) => {
               const key = `bijlage${index}`;
               return (
-                <BwbStructuurAlgemeen
+                <StructuurAlgemeenView
                   id={`${key}`}
                   key={`${key}`}
                   structuurAlgemeen={structuurAlgemeen}
@@ -53,14 +53,14 @@ function BwbBijlage({ bijlage }: { bijlage?: Bijlage }) {
             })}
 
             {bijlage.table?.map((table: Table, index: number) => (
-              <BwbTable key={`${key}_table_${index}`} table={table}></BwbTable>
+              <TableView key={`${key}_table_${index}`} table={table}></TableView>
             ))}
 
             {bijlage.divisie?.map((divisie: Divisie, index: number) => (
-              <BwbDivisie
+              <DivisieView
                 key={`${key}_divisie_${index}`}
                 divisie={divisie}
-              ></BwbDivisie>
+              ></DivisieView>
             ))}
           </>
         )}
@@ -69,4 +69,4 @@ function BwbBijlage({ bijlage }: { bijlage?: Bijlage }) {
   );
 }
 
-export default memo(BwbBijlage);
+export default memo(BijlageView);

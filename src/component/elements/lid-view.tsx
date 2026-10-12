@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import { isLijstItem, type Lid, type StructuurAlgemeenItem } from "../../api";
-import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
-import BwbRawText from "./bwb-raw-text";
+import StructuurAlgemeenView from "./structuur-algemeen-view";
+import RawText from "./raw-text";
 import type { Table } from "../../api";
-import BwbTable from "./bwb-table";
+import TableView from "./table-view";
 
-function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
+function LidView({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
   if (!lid) {
     return <></>;
   }
@@ -26,7 +26,7 @@ function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
               if (isLijst) {
                 return (
                   <Fragment key={`${id}_lid${index}`}>
-                    <BwbStructuurAlgemeen
+                    <StructuurAlgemeenView
                       id={`${id}_lid${index}`}
                       key={`${id}_lid${index}`}
                       structuurAlgemeen={structuurAlgemeen}
@@ -38,13 +38,13 @@ function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
                 return (
                   <p className="lid labeled" key={`${id}_lid${index}`}>
                     <span className="lidnr">
-                      <BwbRawText
+                      <RawText
                         id={`${id}_lidnr${index}`}
                         key={`${id}_lidnr${index}`}
                         rawText={lid.lidnr.text?.join(" ")}
                       />
                     </span>
-                    <BwbStructuurAlgemeen
+                    <StructuurAlgemeenView
                       id={`${id}_lid${index}`}
                       key={`${id}_lid${index}`}
                       structuurAlgemeen={structuurAlgemeen}
@@ -54,7 +54,7 @@ function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
                 );
               } else {
                 return (
-                  <BwbStructuurAlgemeen
+                  <StructuurAlgemeenView
                     id={`${id}_lid${index}`}
                     key={`${id}_lid${index}`}
                     structuurAlgemeen={structuurAlgemeen}
@@ -64,11 +64,11 @@ function BwbLid({ id, type, lid }: { id: string; type?: string; lid: Lid }) {
             },
           )}
           {lid.table?.map((table: Table, index: number) => (
-            <BwbTable key={`${lid.id}_table_${index}`} table={table}></BwbTable>
+            <TableView key={`${lid.id}_table_${index}`} table={table}></TableView>
           ))}
         </li>
       </ul>
     </>
   );
 }
-export default BwbLid;
+export default LidView;

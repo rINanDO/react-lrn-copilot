@@ -3,10 +3,10 @@ import {
   type HeadingLevel,
 } from "@rijkshuisstijl-community/heading-react/no-side-effects";
 import type { Kop } from "../../api";
-import BwbRawText from "./bwb-raw-text";
-import BwbSubtitel from "./bwb-subtitel";
+import RawText from "./raw-text";
+import SubtitelView from "./subtitel-view";
 
-function BwbKop({
+function KopView({
   id,
   kop,
   headingLevel,
@@ -29,13 +29,13 @@ function BwbKop({
     <>
       <Heading level={headingLevel}>
         {labelText} {numberText}
-        {dot} <BwbRawText id={id} key={id} rawText={titleText} />
+        {dot} <RawText id={id} key={id} rawText={titleText} />
       </Heading>
       {kop.subtitel?.map((subtitel, index) => (
-        <BwbSubtitel key={`${id}_subtitel${index}`} subtitel={subtitel} />
+        <SubtitelView key={`${id}_subtitel${index}`} subtitel={subtitel} />
       ))}
     </>
   );
 }
 
-export default BwbKop;
+export default KopView;

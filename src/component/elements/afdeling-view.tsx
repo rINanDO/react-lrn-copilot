@@ -1,11 +1,11 @@
 import "./wetten.css";
 import type { Afdeling } from "../../api";
-import BwbArtikel from "./bwb-artikel";
-import BwbKop from "./bwb-kop";
-import BwbHoofdstuk from "./bwb-hoofdstuk";
-import BwbParagraaf from "./bwb-paragraaf";
+import ArtikelView from "./artikel-view";
+import KopView from "./kop-view";
+import HoofdstukView from "./hoofdstuk-view";
+import ParagraafView from "./paragraaf-view";
 
-function BwbAfdeling({ id, afdeling }: { id?: string; afdeling?: Afdeling }) {
+function AfdelingView({ id, afdeling }: { id?: string; afdeling?: Afdeling }) {
   if (!afdeling) {
     return <></>;
   }
@@ -13,7 +13,7 @@ function BwbAfdeling({ id, afdeling }: { id?: string; afdeling?: Afdeling }) {
     <>
       <div className="afdeling" id={id}>
         <div className="article__header--law afdeling">
-          <BwbKop
+          <KopView
             id={`${id}_afdeling_kop`}
             key={`${id}_afdeling_kop`}
             kop={afdeling.kop}
@@ -21,28 +21,28 @@ function BwbAfdeling({ id, afdeling }: { id?: string; afdeling?: Afdeling }) {
           />
         </div>
         {afdeling.artikel?.map((artikel) => (
-          <BwbArtikel
+          <ArtikelView
             id={`${id}_artikel${artikel.id}`}
             key={`${id}_artikel${artikel.id}`}
             artikel={artikel}
-          ></BwbArtikel>
+          ></ArtikelView>
         ))}
         {afdeling.paragraaf?.map((paragraaf) => (
-          <BwbParagraaf
+          <ParagraafView
             key={`${id}_paragraaf${paragraaf.id}`}
             paragraaf={paragraaf}
-          ></BwbParagraaf>
+          ></ParagraafView>
         ))}
         {afdeling.hoofdstuk?.map((hoofdstuk) => (
-          <BwbHoofdstuk
+          <HoofdstukView
             id={`${id}_hoofdstuk${hoofdstuk.id}`}
             key={`${id}_hoofdstuk${hoofdstuk.id}`}
             hoofdstuk={hoofdstuk}
-          ></BwbHoofdstuk>
+          ></HoofdstukView>
         ))}
       </div>
     </>
   );
 }
 
-export default BwbAfdeling;
+export default AfdelingView;

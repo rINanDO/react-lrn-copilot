@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { encodeHTML } from "./utils";
 
-function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
+function RawText({ id, rawText }: { id: string; rawText?: string }) {
   if (!rawText) {
     return <></>;
   }
@@ -129,4 +129,4 @@ function BwbRawText({ id, rawText }: { id: string; rawText?: string }) {
     </>
   );
 }
-export default BwbRawText;
+export default RawText;

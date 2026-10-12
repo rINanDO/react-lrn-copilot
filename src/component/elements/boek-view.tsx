@@ -1,8 +1,8 @@
 import "./wetten.css";
 import type { Boek } from "../../api";
-import BwbTiteldeel from "./bwb-titeldeel";
+import TiteldeelView from "./titeldeel-view";
 
-function BwbBoek({ boek }: { boek?: Boek }) {
+function BoekView({ boek }: { boek?: Boek }) {
   if (!boek) {
     return <></>;
   }
@@ -24,11 +24,11 @@ function BwbBoek({ boek }: { boek?: Boek }) {
         {boek.titeldeel?.map((titeldeel, index: number) => {
           const key = `${titeldeel.id}_titeldeel_${index}`;
           return (
-            <BwbTiteldeel
+            <TiteldeelView
               id={key}
               key={key}
               titeldeel={titeldeel}
-            ></BwbTiteldeel>
+            ></TiteldeelView>
           );
         })}
       </div>
@@ -36,4 +36,4 @@ function BwbBoek({ boek }: { boek?: Boek }) {
   );
 }
 
-export default BwbBoek;
+export default BoekView;

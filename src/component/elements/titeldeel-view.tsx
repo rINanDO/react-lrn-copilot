@@ -1,12 +1,12 @@
 import "./wetten.css";
 import type { Afdeling, Artikel, Titeldeel, Paragraaf } from "../../api";
-import BwbKop from "./bwb-kop";
-import BwbHoofdstuk from "./bwb-hoofdstuk";
-import BwbArtikel from "./bwb-artikel";
-import BwbParagraaf from "./bwb-paragraaf";
-import BwbAfdeling from "./bwb-afdeling";
+import KopView from "./kop-view";
+import HoofdstukView from "./hoofdstuk-view";
+import ArtikelView from "./artikel-view";
+import ParagraafView from "./paragraaf-view";
+import AfdelingView from "./afdeling-view";
 
-function BwbTiteldeel({
+function TiteldeelView({
   id,
   titeldeel,
 }: {
@@ -19,7 +19,7 @@ function BwbTiteldeel({
   return (
     <>
       <div className="article__header--law titeldeel">
-        <BwbKop
+        <KopView
           id={id}
           key={id}
           headingLevel={4}
@@ -31,7 +31,7 @@ function BwbTiteldeel({
         const hoofdstukId = `${id ?? ""}_Hoofdstuk${hoofdstuk.id ?? ""}`;
         return (
           <div className="hoofdstuk" id={hoofdstukId} key={hoofdstukId}>
-            <BwbHoofdstuk
+            <HoofdstukView
               id={hoofdstukId}
               key={hoofdstukId}
               hoofdstuk={hoofdstuk}
@@ -43,7 +43,7 @@ function BwbTiteldeel({
         const paragraafId = `${id ?? ""}_Paragraaf${paragraaf.id ?? ""}`;
         return (
           <div className="paragraaf" id={paragraafId} key={paragraafId}>
-            <BwbParagraaf key={paragraafId} paragraaf={paragraaf} />
+            <ParagraafView key={paragraafId} paragraaf={paragraaf} />
           </div>
         );
       })}
@@ -51,7 +51,7 @@ function BwbTiteldeel({
         const artikelId = `${id ?? ""}_Artikel${artikel.id ?? ""}`;
         return (
           <div className="artikel" id={artikelId} key={artikelId}>
-            <BwbArtikel id={artikelId} key={artikelId} artikel={artikel} />
+            <ArtikelView id={artikelId} key={artikelId} artikel={artikel} />
           </div>
         );
       })}
@@ -60,7 +60,7 @@ function BwbTiteldeel({
         const afdelingId = `${id ?? ""}_Afdeling${afdeling.id ?? ""}`;
         return (
           <div className="afdeling" id={afdelingId} key={afdelingId}>
-            <BwbAfdeling id={afdelingId} key={afdelingId} afdeling={afdeling} />
+            <AfdelingView id={afdelingId} key={afdelingId} afdeling={afdeling} />
           </div>
         );
       })}
@@ -68,4 +68,4 @@ function BwbTiteldeel({
   );
 }
 
-export default BwbTiteldeel;
+export default TiteldeelView;

@@ -1,7 +1,7 @@
 import type { Li, StructuurAlgemeenItem } from "../../api";
-import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
+import StructuurAlgemeenView from "./structuur-algemeen-view";
 
-function BwbLi({ id, li }: { id: string; li: Li }) {
+function LiView({ id, li }: { id: string; li: Li }) {
   if (!li) {
     return <></>;
   }
@@ -19,7 +19,7 @@ function BwbLi({ id, li }: { id: string; li: Li }) {
             (liStructuurAlgemeen, liIndex: number) => {
               return (
                 <>
-                  <BwbStructuurAlgemeen
+                  <StructuurAlgemeenView
                     id={`${id}_${liIndex + 1}`}
                     key={`${id}_${liIndex + 1}`}
                     noParagraph={liIndex === 0}
@@ -34,4 +34,4 @@ function BwbLi({ id, li }: { id: string; li: Li }) {
     </>
   );
 }
-export default BwbLi;
+export default LiView;

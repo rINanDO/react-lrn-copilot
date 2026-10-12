@@ -1,10 +1,10 @@
 import { memo } from "react";
 import type { Artikel, Paragraaf, RegelingTekst } from "../../api";
-import BwbArtikel from "./bwb-artikel";
-import BwbHoofdstuk from "./bwb-hoofdstuk";
-import BwbParagraaf from "./bwb-paragraaf";
+import ArtikelView from "./artikel-view";
+import HoofdstukView from "./hoofdstuk-view";
+import ParagraafView from "./paragraaf-view";
 
-function BwbRegelingTekst({
+function RegelingTekstView({
   regelingTekst,
 }: {
   regelingTekst: RegelingTekst | undefined;
@@ -17,13 +17,13 @@ function BwbRegelingTekst({
   return (
     <>
       {paragrafen.map((paragraaf: Paragraaf, index: number) => (
-        <BwbParagraaf key={`paragraaf_${index}`} paragraaf={paragraaf} />
+        <ParagraafView key={`paragraaf_${index}`} paragraaf={paragraaf} />
       ))}
       {regelingTekst?.hoofdstuk?.map((hoofdstuk, index) => {
         const key = hoofdstuk.id ?? `hoofdstuk_${index}`;
         return (
           <div className="hoofdstuk" key={key}>
-            <BwbHoofdstuk
+            <HoofdstukView
               id={key}
               key={key}
               hoofdstuk={hoofdstuk}
@@ -32,11 +32,11 @@ function BwbRegelingTekst({
         );
       })}
       {regelingTekst?.artikel?.map((artikel: Artikel, index: number) => (
-        <BwbArtikel key={`artikel_${index}`} artikel={artikel} />
+        <ArtikelView key={`artikel_${index}`} artikel={artikel} />
       ))}
 
-      {lastParagraaf && <BwbParagraaf paragraaf={lastParagraaf} />}
+      {lastParagraaf && <ParagraafView paragraaf={lastParagraaf} />}
     </>
   );
 }
-export default memo(BwbRegelingTekst);
+export default memo(RegelingTekstView);

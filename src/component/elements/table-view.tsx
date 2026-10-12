@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import "./wetten.css";
 import type { StructuurAlgemeenItem, Table, Tgroup } from "../../api";
-import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
+import StructuurAlgemeenView from "./structuur-algemeen-view";
 
-function BwbTable({ table }: { table?: Table }) {
+function TableView({ table }: { table?: Table }) {
   if (!table) {
     return <></>;
   }
@@ -31,7 +31,7 @@ function BwbTable({ table }: { table?: Table }) {
                               | undefined
                           )?.map((liStructuurAlgemeen, liIndex: number) => {
                             return (
-                              <BwbStructuurAlgemeen
+                              <StructuurAlgemeenView
                                 id={`table_header_${liIndex}`}
                                 key={`table_header_${liIndex}`}
                                 structuurAlgemeen={liStructuurAlgemeen}
@@ -65,7 +65,7 @@ function BwbTable({ table }: { table?: Table }) {
                               | undefined
                           )?.map((liStructuurAlgemeen, liIndex: number) => {
                             return (
-                              <BwbStructuurAlgemeen
+                              <StructuurAlgemeenView
                                 id={`table_body_${liIndex}`}
                                 key={`table_body_${liIndex}`}
                                 structuurAlgemeen={liStructuurAlgemeen}
@@ -86,4 +86,4 @@ function BwbTable({ table }: { table?: Table }) {
   );
 }
 
-export default BwbTable;
+export default TableView;

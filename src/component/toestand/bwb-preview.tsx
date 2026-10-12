@@ -5,7 +5,7 @@ import { useToestand } from "./use-toestand";
 import BwbLoadingProgress from "./bwb-loading-progress";
 import BwbLoadError from "./bwb-load-error";
 import BwbToestandHeader from "./bwb-toestand-header";
-import BwbWetgeving from "./bwb-wetgeving";
+import WetgevingView from "../elements/wetgeving-view";
 import Footer from "../page/footer";
 import SideBar from "../page/side-bar";
 
@@ -47,7 +47,7 @@ export function BwbPreviewContent({
                 isToekomstig={isToekomstig}
                 citeertitel={wetgeving?.citeertitel}
               />
-              <BwbWetgeving wetgeving={wetgeving} />
+              <WetgevingView wetgeving={wetgeving} />
             </div>
           </div>
         </BwbToestandContext.Provider>

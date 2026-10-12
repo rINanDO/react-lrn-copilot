@@ -5,8 +5,8 @@ import { BwbToestandContext } from "./bwb-toestand-context";
 import { useCvdr } from "./use-toestand";
 import BwbLoadingProgress from "./bwb-loading-progress";
 import BwbLoadError from "./bwb-load-error";
-import BwbRawText from "./bwb-raw-text";
-import BwbWetgeving from "./bwb-wetgeving";
+import RawText from "../elements/raw-text";
+import WetgevingView from "../elements/wetgeving-view";
 import Footer from "../page/footer";
 import SideBar from "../page/side-bar";
 
@@ -42,12 +42,12 @@ export function CvdrPreviewContent({
           <div id="content">
             <div id="regeling">
               <Heading level={1}>
-                <BwbRawText
+                <RawText
                   id="citeerTitel"
                   rawText={wetgeving?.citeertitel?.text?.join(" ")}
                 />
               </Heading>
-              <BwbWetgeving wetgeving={wetgeving} />
+              <WetgevingView wetgeving={wetgeving} />
             </div>
           </div>
         </BwbToestandContext.Provider>

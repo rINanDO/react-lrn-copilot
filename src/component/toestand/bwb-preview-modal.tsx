@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { BwbPreviewContent } from "./bwb-preview";
-import "./wetten.css";
+import "../elements/wetten.css";
 
 interface BwbPreviewModalProps {
   bwbId: string;

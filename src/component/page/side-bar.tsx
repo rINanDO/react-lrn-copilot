@@ -1,7 +1,7 @@
 import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
 import type { Kop, Hoofdstuk, Artikel, Paragraaf, Wetgeving } from "../../api";
 import { Children, memo, useId, useState, type ReactNode } from "react";
-import BwbRawText from "../toestand/bwb-raw-text";
+import RawText from "../elements/raw-text";
 import "./side-bar.css";
 
 function kopNumber(kop?: Kop): string | undefined {
@@ -100,7 +100,7 @@ function TocItem({
         {labelText} {numberText}
         {useSmallText && (
           <small>
-            <BwbRawText
+            <RawText
               id={`hoofdstuk_${id}`}
               key={`hoofdstuk_${id}`}
               rawText={titleText}
@@ -108,7 +108,7 @@ function TocItem({
           </small>
         )}
         {!useSmallText && (
-          <BwbRawText
+          <RawText
             id={`hoofdstuk_${id}`}
             key={`hoofdstuk_${id}`}
             rawText={titleText}
@@ -150,7 +150,7 @@ function SideBar({ wetgeving }: { wetgeving: Wetgeving | undefined }) {
     <div id="sidebar" className="columns--sticky-sidebar__sidebar">
       <div>
         <Heading level={2}>
-          <BwbRawText
+          <RawText
             id="citeerTitel"
             rawText={wetgeving?.citeertitel?.text?.join(" ")}
           />

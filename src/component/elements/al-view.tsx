@@ -1,7 +1,7 @@
 import type { Al } from "../../api";
 import { processAlHtml } from "./al-html-processor";
 
-function BwbAl({ al }: { al: Al }) {
+function AlView({ al }: { al: Al }) {
   if (!al) {
     return <></>;
   }
@@ -9,4 +9,4 @@ function BwbAl({ al }: { al: Al }) {
   return <div dangerouslySetInnerHTML={{ __html: rawHtml }} />;
 }
 
-export default BwbAl;
+export default AlView;

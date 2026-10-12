@@ -1,11 +1,11 @@
 import "./wetten.css";
-import BwbArtikel from "./bwb-artikel";
+import ArtikelView from "./artikel-view";
 import type { Divisie, StructuurAlgemeenItem, Table } from "../../api";
-import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
-import BwbTable from "./bwb-table";
-import BwbKop from "./bwb-kop";
+import StructuurAlgemeenView from "./structuur-algemeen-view";
+import TableView from "./table-view";
+import KopView from "./kop-view";
 
-function BwbDivisie({ divisie }: { divisie?: Divisie }) {
+function DivisieView({ divisie }: { divisie?: Divisie }) {
   if (!divisie) {
     return <></>;
   }
@@ -14,7 +14,7 @@ function BwbDivisie({ divisie }: { divisie?: Divisie }) {
   return (
     <>
       <div className="article__header--law divisie">
-        <BwbKop
+        <KopView
           id={kopKey}
           key={kopKey}
           kop={divisie.kop}
@@ -23,17 +23,17 @@ function BwbDivisie({ divisie }: { divisie?: Divisie }) {
         />
       </div>
       {divisie.artikel?.map((artikel) => (
-        <BwbArtikel
+        <ArtikelView
           key={`${divisie.id}_artikel_${artikel.id}`}
           artikel={artikel}
-        ></BwbArtikel>
+        ></ArtikelView>
       ))}
       {(
         divisie.structuurAlgemeen as StructuurAlgemeenItem[] | null | undefined
       )?.map((structuurAlgemeen, index) => {
         const key = `${divisie.id}_structuuralgemeen_${index}`;
         return (
-          <BwbStructuurAlgemeen
+          <StructuurAlgemeenView
             id={key}
             key={key}
             structuurAlgemeen={structuurAlgemeen}
@@ -41,16 +41,16 @@ function BwbDivisie({ divisie }: { divisie?: Divisie }) {
         );
       })}
       {divisie.table?.map((table: Table, index: number) => (
-        <BwbTable key={`${divisie.id}_table_${index}`} table={table}></BwbTable>
+        <TableView key={`${divisie.id}_table_${index}`} table={table}></TableView>
       ))}
       {divisie.divisie?.map((subDivisie) => (
-        <BwbDivisie
+        <DivisieView
           key={`${divisie.id}_divisie_${subDivisie.id}`}
           divisie={subDivisie}
-        ></BwbDivisie>
+        ></DivisieView>
       ))}
     </>
   );
 }
 
-export default BwbDivisie;
+export default DivisieView;

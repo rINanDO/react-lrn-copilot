@@ -1,14 +1,14 @@
 import "./wetten.css";
-import BwbLid from "./bwb-lid";
-import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
-import BwbKop from "./bwb-kop";
+import LidView from "./lid-view";
+import StructuurAlgemeenView from "./structuur-algemeen-view";
+import KopView from "./kop-view";
 import {
   isLijstItem,
   type Artikel,
   type StructuurAlgemeenItem,
 } from "../../api";
 
-function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
+function ArtikelView({ id, artikel }: { id?: string; artikel?: Artikel }) {
   const inwerkingtredingDatum =
     artikel?.metaData?.brondata?.[0]?.inwerkingtreding?.inwerkingtredingDatum
       ?.isodatum;
@@ -22,7 +22,7 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
   return (
     <div className="bwb-artikel">
       <div className="article__header--law artikel">
-        <BwbKop
+        <KopView
           id={kopKey}
           key={kopKey}
           kop={artikel.kop}
@@ -56,7 +56,7 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
 
                 return isLijst ? (
                   <>
-                    <BwbStructuurAlgemeen
+                    <StructuurAlgemeenView
                       id={structuurAlgemeenKey}
                       key={structuurAlgemeenKey}
                       structuurAlgemeen={structuurAlgemeen}
@@ -65,7 +65,7 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
                 ) : (
                   <>
                     <p className="al">
-                      <BwbStructuurAlgemeen
+                      <StructuurAlgemeenView
                         id={structuurAlgemeenKey}
                         key={structuurAlgemeenKey}
                         structuurAlgemeen={structuurAlgemeen}
@@ -76,7 +76,7 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
               })}
               {artikel.lid?.map((lid, index) => {
                 const key = `${id}_lid${index}`;
-                return <BwbLid key={key} id={key} lid={lid} />;
+                return <LidView key={key} id={key} lid={lid} />;
               })}
             </div>
           </>
@@ -86,4 +86,4 @@ function BwbArtikel({ id, artikel }: { id?: string; artikel?: Artikel }) {
   );
 }
 
-export default BwbArtikel;
+export default ArtikelView;

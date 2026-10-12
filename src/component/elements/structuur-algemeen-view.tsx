@@ -4,11 +4,11 @@ import {
   isPlaatjeItem,
   type StructuurAlgemeenItem,
 } from "../../api";
-import BwbLijst from "./bwb-lijst";
-import BwbPlaatje from "./bwb-plaatje";
-import BwbRawText from "./bwb-raw-text";
+import LijstView from "./lijst-view";
+import PlaatjeView from "./plaatje-view";
+import RawText from "./raw-text";
 
-function BwbStructuurAlgemeen({
+function StructuurAlgemeenView({
   id,
   structuurAlgemeen,
   noParagraph,
@@ -26,7 +26,7 @@ function BwbStructuurAlgemeen({
       {(() => {
         if (isLijstItem(structuurAlgemeen))
           return (
-            <BwbLijst
+            <LijstView
               id={`${id}_lijst`}
               key={`${id}_lijst`}
               lijst={structuurAlgemeen}
@@ -35,7 +35,7 @@ function BwbStructuurAlgemeen({
 
         if (isPlaatjeItem(structuurAlgemeen))
           return (
-            <BwbPlaatje
+            <PlaatjeView
               id={`${id}_plaatje`}
               key={`${id}_plaatje`}
               plaatje={structuurAlgemeen}
@@ -44,7 +44,7 @@ function BwbStructuurAlgemeen({
         if (isAlItem(structuurAlgemeen)) {
           return noParagraph ? (
             <>
-              <BwbRawText
+              <RawText
                 id={`${id}_rawText`}
                 key={`${id}_rawText`}
                 rawText={structuurAlgemeen.text?.join(" ")}
@@ -53,7 +53,7 @@ function BwbStructuurAlgemeen({
           ) : (
             <>
               <p className="al">
-                <BwbRawText
+                <RawText
                   id={`${id}_rawText`}
                   key={`${id}_rawText`}
                   rawText={structuurAlgemeen.text?.join(" ")}
@@ -65,7 +65,7 @@ function BwbStructuurAlgemeen({
 
         return (
           <>
-            <BwbRawText
+            <RawText
               id={`${id}_rawText`}
               key={`${id}_rawText`}
               rawText={structuurAlgemeen.text?.join(" ")}
@@ -76,4 +76,4 @@ function BwbStructuurAlgemeen({
     </>
   );
 }
-export default BwbStructuurAlgemeen;
+export default StructuurAlgemeenView;
