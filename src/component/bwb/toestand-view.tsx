@@ -4,17 +4,18 @@ import { useToestand } from "./use-toestand";
 import BwbToestandHeader from "./bwb-toestand-header";
 import DocumentView from "../document/document-view";
 
-interface BwbPreviewContentProps {
+interface ToestandViewProps {
   bwbId: string;
   expression: string;
   isToekomstig: boolean;
 }
 
-export function BwbPreviewContent({
+/** A BWB toestand, the `<toestand>` root of its XML. */
+export function ToestandView({
   bwbId,
   expression,
   isToekomstig,
-}: BwbPreviewContentProps) {
+}: ToestandViewProps) {
   const state = useToestand(bwbId, expression, isToekomstig);
   return (
     <DocumentView
@@ -33,7 +34,8 @@ export function BwbPreviewContent({
   );
 }
 
-function BwbPreview({
+/** Route page showing the toestand named by the URL. */
+function ToestandPage({
   isToekomstig: isToekomstigOverride,
 }: { isToekomstig?: boolean } = {}) {
   const params = useParams();
@@ -42,7 +44,7 @@ function BwbPreview({
   const isToekomstig = isToekomstigOverride ?? params.isToekomstig === "true";
 
   return (
-    <BwbPreviewContent
+    <ToestandView
       key={`${bwbId}:${expression}:${isToekomstig}`}
       bwbId={bwbId}
       expression={expression}
@@ -51,4 +53,4 @@ function BwbPreview({
   );
 }
 
-export default BwbPreview;
+export default ToestandPage;

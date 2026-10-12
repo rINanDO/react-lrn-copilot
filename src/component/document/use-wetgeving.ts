@@ -14,7 +14,7 @@ export type WetgevingState =
   | { status: "loaded"; wetgeving: Wetgeving | undefined };
 
 const GENERIC_ERROR_MESSAGE =
-  "Er is een fout opgetreden bij het laden van de preview.";
+  "Er is een fout opgetreden bij het laden van de regeling.";
 
 export function toLoadError(err: unknown): WetgevingLoadError {
   if (err instanceof Error) {

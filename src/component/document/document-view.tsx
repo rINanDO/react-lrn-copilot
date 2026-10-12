@@ -33,7 +33,7 @@ function DocumentView({
 
   const { wetgeving } = state;
   return (
-    <div className="preview">
+    <div className="document">
       <a href={documentUrl}>{fileName}</a>
       <div className="container columns columns--sticky-sidebar row">
         <DocumentContext.Provider value={{ documentUrl }}>

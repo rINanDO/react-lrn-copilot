@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { BwbPreviewContent } from './bwb-preview';
+import { ToestandView } from './toestand-view';
 import * as bwbRepository from '../../api/bwbRepository';
 
 vi.mock('../../api/bwbRepository', async (importOriginal) => ({
@@ -24,9 +24,9 @@ beforeEach(() => {
   );
 });
 
-describe('BwbPreviewContent', () => {
+describe('ToestandView', () => {
   it('calls the API with the correct parameters', async () => {
-    render(<BwbPreviewContent bwbId="BWBR0001840" expression="2026-01-01_0" isToekomstig={false} />);
+    render(<ToestandView bwbId="BWBR0001840" expression="2026-01-01_0" isToekomstig={false} />);
     await waitFor(() => {
       expect(bwbRepository.getToestand).toHaveBeenCalledWith('BWBR0001840', '2026-01-01_0', false, {
         onProgress: expect.any(Function),
@@ -37,7 +37,7 @@ describe('BwbPreviewContent', () => {
 
   it('shows an error alert when the API call fails', async () => {
     vi.mocked(bwbRepository.getToestand).mockRejectedValue(new Error('Not found'));
-    render(<BwbPreviewContent bwbId="BWBR0001840" expression="2026-01-01_0" isToekomstig={false} />);
+    render(<ToestandView bwbId="BWBR0001840" expression="2026-01-01_0" isToekomstig={false} />);
     expect(await screen.findByRole('alert')).toBeInTheDocument();
   });
 
@@ -46,12 +46,12 @@ describe('BwbPreviewContent', () => {
       options?.onProgress?.({ phase: 'downloading', loaded: 6_200_000, total: 14_100_000 });
       return new Promise(() => {});
     });
-    render(<BwbPreviewContent bwbId="BWBR0041330" expression="2026-07-01_0" isToekomstig={false} />);
+    render(<ToestandView bwbId="BWBR0041330" expression="2026-07-01_0" isToekomstig={false} />);
     expect(await screen.findByRole('status')).toHaveTextContent('Regeling laden… 6,2 van 14,1 MB');
   });
 
   it('renders the citeertitel once loaded', async () => {
-    render(<BwbPreviewContent bwbId="BWBR0001840" expression="2026-01-01_0" isToekomstig={true} />);
+    render(<ToestandView bwbId="BWBR0001840" expression="2026-01-01_0" isToekomstig={true} />);
     await waitFor(() => {
       expect(
         screen.getByRole('heading', { level: 1, name: 'Wet op de belastingen' }),

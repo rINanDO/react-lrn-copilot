@@ -4,16 +4,16 @@ import { useCvdr } from "./use-cvdr";
 import DocumentTitle from "../document/document-title";
 import DocumentView from "../document/document-view";
 
-interface CvdrPreviewContentProps {
+interface CvdrViewProps {
   cvdrId: string;
   expression: string;
 }
 
-/** A CVDR regeling, rendered with the element components it shares with BWB. */
-export function CvdrPreviewContent({
+/** A CVDR regeling, the `<cvdr>` root of its XML, rendered with the element components it shares with BWB. */
+export function CvdrView({
   cvdrId,
   expression,
-}: CvdrPreviewContentProps) {
+}: CvdrViewProps) {
   const state = useCvdr(cvdrId, expression);
   return (
     <DocumentView
@@ -27,13 +27,14 @@ export function CvdrPreviewContent({
   );
 }
 
-function CvdrPreview() {
+/** Route page showing the CVDR regeling named by the URL. */
+function CvdrPage() {
   const params = useParams();
   const cvdrId = params.cvdr ?? "";
   const expression = params.expression ?? "";
 
   return (
-    <CvdrPreviewContent
+    <CvdrView
       key={`${cvdrId}:${expression}`}
       cvdrId={cvdrId}
       expression={expression}
@@ -41,4 +42,4 @@ function CvdrPreview() {
   );
 }
 
-export default CvdrPreview;
+export default CvdrPage;

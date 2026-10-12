@@ -44,7 +44,7 @@ export function BwbExpressionsContent({ bwbId }: { bwbId: string }) {
 
   // No version in force (e.g. a withdrawn regulation): list them all.
   return (
-    <div className="bwb-preview">
+    <div className="bwb-expressions">
       <Heading level={1}>{bwbId}</Heading>
       {expressions.length === 0 ? (
         <p>Geen versies gevonden.</p>
