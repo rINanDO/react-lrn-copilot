@@ -3,8 +3,14 @@ import { appRoutes } from "./routes";
 import ToestandPage from "../component/bwb/toestand-view";
 import BwbExpressions from "../component/bwb/bwb-expressions";
 import CvdrPage from "../component/cvdr/cvdr-view";
+import BwbLandingPage from "../component/page/bwb-landing-page";
 
 export const router = createBrowserRouter([
+  {
+    path: appRoutes.bwbLanding,
+    handle: { title: "Wetten" },
+    element: <BwbLandingPage />,
+  },
   {
     path: appRoutes.bwbExpressions,
     handle: { title: "Wetten" },
