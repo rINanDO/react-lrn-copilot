@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getManifest,
   type ManifestExpression,
-} from "../../api/wettenRepository";
+} from "../../api/bwbRepository";
 
 /** True when the expression is in force on `today` (`yyyy-mm-dd`). */
 export function isGeldend(

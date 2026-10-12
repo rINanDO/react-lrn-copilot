@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getToestandUrl } from "../../api/wettenRepository";
+import { getToestandUrl } from "../../api/bwbRepository";
 import { BwbToestandContext } from "./bwb-toestand-context";
 import { useToestand } from "./use-toestand";
 import BwbLoadingProgress from "./bwb-loading-progress";

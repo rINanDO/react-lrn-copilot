@@ -3,9 +3,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import BwbToestandHeader from './bwb-toestand-header';
 import type { Citeertitel } from '../../api';
-import * as wettenRepository from '../../api/wettenRepository';
+import * as bwbRepository from '../../api/bwbRepository';
 
-vi.mock('../../api/wettenRepository', () => ({
+vi.mock('../../api/bwbRepository', () => ({
   getManifest: vi.fn(),
 }));
 
@@ -15,7 +15,7 @@ afterEach(cleanup);
 
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.mocked(wettenRepository.getManifest).mockResolvedValue({ bwbId: 'BWBR0001840', expressions: [] });
+  vi.mocked(bwbRepository.getManifest).mockResolvedValue({ bwbId: 'BWBR0001840', expressions: [] });
 });
 
 function renderHeader(isToekomstig: boolean) {
@@ -39,7 +39,7 @@ describe('BwbToestandHeader', () => {
 
   it('opens the version dialog for a current toestand', async () => {
     renderHeader(false);
-    expect(wettenRepository.getManifest).not.toHaveBeenCalled();
+    expect(bwbRepository.getManifest).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'Andere versies' }));
     expect(await screen.findByRole('dialog')).toHaveTextContent('Versies van BWBR0001840');
   });

@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Wetgeving } from "../../api";
-import {
-  getCvdr,
-  getToestand,
-  type GetToestandOptions,
-  type ToestandProgress,
-} from "../../api/wettenRepository";
+import { getToestand } from "../../api/bwbRepository";
+import { getCvdr } from "../../api/cvdrRepository";
+import type { FetchOptions, LoadProgress } from "../../api/repository";
 
 export type ToestandLoadError = {
   message: string;
@@ -14,7 +11,7 @@ export type ToestandLoadError = {
 };
 
 export type ToestandState =
-  | { status: "loading"; progress?: ToestandProgress }
+  | { status: "loading"; progress?: LoadProgress }
   | { status: "error"; error: ToestandLoadError }
   | { status: "loaded"; wetgeving: Wetgeving | undefined };
 
@@ -56,7 +53,7 @@ export function useCvdr(cvdrId: string, expression: string): ToestandState {
 function useWetgeving(
   key: string,
   load: (
-    options: Required<Pick<GetToestandOptions, "onProgress" | "signal">>,
+    options: Required<Pick<FetchOptions, "onProgress" | "signal">>,
   ) => Promise<Wetgeving | undefined>,
 ): ToestandState {
   // Tagged with the document it belongs to, so a change of inputs reads as

@@ -18,7 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useMemo, useState } from "react";
 import { generatePath, Link } from "react-router-dom";
 import { appRoutes } from "../../router/routes";
-import type { ManifestExpression } from "../../api/wettenRepository";
+import type { ManifestExpression } from "../../api/bwbRepository";
 import { isGeldend, useManifestExpressions } from "./use-manifest-expressions";
 
 const PAGE_SIZE = 10;

@@ -1,5 +1,5 @@
 import { Box, LinearProgress, Typography } from "@mui/material";
-import type { ToestandProgress } from "../../api/wettenRepository";
+import type { LoadProgress } from "../../api/repository";
 
 function formatMegabytes(bytes: number): string {
   return (bytes / 1_000_000).toLocaleString("nl-NL", {
@@ -8,7 +8,7 @@ function formatMegabytes(bytes: number): string {
   });
 }
 
-function BwbLoadingProgress({ progress }: { progress?: ToestandProgress }) {
+function BwbLoadingProgress({ progress }: { progress?: LoadProgress }) {
   const total =
     progress?.total && progress.loaded <= progress.total
       ? progress.total

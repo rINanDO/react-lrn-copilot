@@ -1,5 +1,5 @@
 import type { Plaatje } from "../../api";
-import { getIllustratieUrl } from "../../api/wettenRepository";
+import { getIllustratieUrl } from "../../api/repository";
 import { useBwbToestand } from "./bwb-toestand-context";
 
 function BwbPlaatje({ id, plaatje }: { id: string; plaatje?: Plaatje }) {

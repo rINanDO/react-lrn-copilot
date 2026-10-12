@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Heading } from "@rijkshuisstijl-community/components-react/no-side-effects";
-import { getCvdrUrl } from "../../api/wettenRepository";
+import { getCvdrUrl } from "../../api/cvdrRepository";
 import { BwbToestandContext } from "./bwb-toestand-context";
 import { useCvdr } from "./use-toestand";
 import BwbLoadingProgress from "./bwb-loading-progress";

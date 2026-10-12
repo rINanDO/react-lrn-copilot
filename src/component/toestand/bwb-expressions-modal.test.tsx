@@ -2,9 +2,9 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import BwbExpressionsModal from './bwb-expressions-modal';
-import * as wettenRepository from '../../api/wettenRepository';
+import * as bwbRepository from '../../api/bwbRepository';
 
-vi.mock('../../api/wettenRepository', () => ({
+vi.mock('../../api/bwbRepository', () => ({
   getManifest: vi.fn(),
 }));
 
@@ -18,7 +18,7 @@ afterEach(cleanup);
 
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.mocked(wettenRepository.getManifest).mockResolvedValue({
+  vi.mocked(bwbRepository.getManifest).mockResolvedValue({
     bwbId: 'BWBR0001840',
     expressions,
   });
