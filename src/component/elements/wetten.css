@@ -103,3 +103,9 @@
   content-visibility: auto;
   contain-intrinsic-size: auto 400px;
 }
+
+/* Occurrences of the ?q= text, painted with the CSS Custom Highlight API. */
+::highlight(zoekterm) {
+  background-color: #ffe066;
+  color: #000;
+}

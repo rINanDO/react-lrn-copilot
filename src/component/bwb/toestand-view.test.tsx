@@ -1,7 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ToestandView } from './toestand-view';
 import * as bwbRepository from '../../api/bwbRepository';
+import { HIGHLIGHT_NAME } from '../document/use-query-highlight';
 
 vi.mock('../../api/bwbRepository', async (importOriginal) => ({
   ...(await importOriginal<typeof bwbRepository>()),
@@ -57,5 +58,59 @@ describe('ToestandView', () => {
         screen.getByRole('heading', { level: 1, name: 'Wet op de belastingen' }),
       ).toBeInTheDocument();
     });
+  });
+});
+
+describe('ToestandView highlighting', () => {
+  let highlights: Map<string, { ranges: Range[] }>;
+
+  beforeEach(() => {
+    highlights = new Map();
+    vi.stubGlobal('CSS', { highlights });
+    vi.stubGlobal(
+      'Highlight',
+      class {
+        ranges: Range[];
+        constructor(...ranges: Range[]) {
+          this.ranges = ranges;
+        }
+      },
+    );
+    Element.prototype.scrollIntoView = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  function highlighted(): string[] | undefined {
+    return highlights.get(HIGHLIGHT_NAME)?.ranges.map((range) => range.toString());
+  }
+
+  it('highlights the query in the citeertitel but not in the sidebar', async () => {
+    render(
+      <ToestandView
+        bwbId="BWBR0001840"
+        expression="2026-01-01_0"
+        isToekomstig={true}
+        highlightQuery="belastingen"
+      />,
+    );
+    // The sidebar repeats the citeertitel; only the heading above the text counts.
+    await waitFor(() => expect(highlighted()).toEqual(['belastingen']));
+    const range = highlights.get(HIGHLIGHT_NAME)!.ranges[0];
+    expect(range.startContainer.parentElement?.closest('#regeling')).not.toBeNull();
+  });
+
+  it('does not highlight text that only appears in the sidebar', async () => {
+    render(
+      <ToestandView
+        bwbId="BWBR0001840"
+        expression="2026-01-01_0"
+        isToekomstig={true}
+        highlightQuery="Inhoudsopgave"
+      />,
+    );
+    await waitFor(() => expect(highlighted()).toEqual([]));
   });
 });
