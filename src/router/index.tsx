@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import { appRoutes } from "./routes";
-import BwbPreview from "../component/toestand/bwb-preview";
-import BwbExpressions from "../component/toestand/bwb-expressions";
-import CvdrPreview from "../component/toestand/cvdr-preview";
+import BwbPreview from "../component/bwb/bwb-preview";
+import BwbExpressions from "../component/bwb/bwb-expressions";
+import CvdrPreview from "../component/cvdr/cvdr-preview";
 
 export const router = createBrowserRouter([
   {
