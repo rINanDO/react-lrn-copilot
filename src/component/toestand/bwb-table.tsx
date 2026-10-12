@@ -3,7 +3,7 @@ import "./wetten.css";
 import type { StructuurAlgemeenItem, Table, Tgroup } from "../../api";
 import BwbStructuurAlgemeen from "./bwb-structuur-algemeen";
 
-function BwbTable({ table }: { bwbId?: string; table?: Table }) {
+function BwbTable({ table }: { table?: Table }) {
   if (!table) {
     return <></>;
   }

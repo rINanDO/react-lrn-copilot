@@ -2,7 +2,7 @@ import "./wetten.css";
 import type { Boek } from "../../api";
 import BwbTiteldeel from "./bwb-titeldeel";
 
-function BwbBoek({ bwbId, boek }: { bwbId?: string; boek?: Boek }) {
+function BwbBoek({ boek }: { boek?: Boek }) {
   if (!boek) {
     return <></>;
   }
@@ -27,7 +27,6 @@ function BwbBoek({ bwbId, boek }: { bwbId?: string; boek?: Boek }) {
             <BwbTiteldeel
               id={key}
               key={key}
-              bwbId={bwbId}
               titeldeel={titeldeel}
             ></BwbTiteldeel>
           );

@@ -3,10 +3,8 @@ import BwbKop from "./bwb-kop";
 import BwbWettekst from "./bwb-wettekst";
 
 function BwbVerdragTekst({
-  bwbId,
   verdragTekst,
 }: {
-  bwbId: string;
   verdragTekst: Verdragtekst | undefined;
 }) {
   if (!verdragTekst) {
@@ -16,7 +14,7 @@ function BwbVerdragTekst({
   return (
     <>
       <BwbKop key={id} id={id} kop={verdragTekst.kop} headingLevel={1} />
-      <BwbWettekst bwbId={bwbId} wettekst={verdragTekst.wettekst} />
+      <BwbWettekst wettekst={verdragTekst.wettekst} />
     </>
   );
 }

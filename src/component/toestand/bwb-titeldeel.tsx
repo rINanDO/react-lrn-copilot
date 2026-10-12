@@ -8,11 +8,9 @@ import BwbAfdeling from "./bwb-afdeling";
 
 function BwbTiteldeel({
   id,
-  bwbId,
   titeldeel,
 }: {
   id: string;
-  bwbId?: string;
   titeldeel?: Titeldeel;
 }) {
   if (!titeldeel) {
@@ -36,7 +34,6 @@ function BwbTiteldeel({
             <BwbHoofdstuk
               id={hoofdstukId}
               key={hoofdstukId}
-              bwbId={bwbId}
               hoofdstuk={hoofdstuk}
             />
           </div>

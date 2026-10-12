@@ -47,7 +47,7 @@ export function BwbPreviewContent({
                 isToekomstig={isToekomstig}
                 citeertitel={wetgeving?.citeertitel}
               />
-              <BwbWetgeving bwbId={bwbId} wetgeving={wetgeving} />
+              <BwbWetgeving wetgeving={wetgeving} />
             </div>
           </div>
         </BwbToestandContext.Provider>

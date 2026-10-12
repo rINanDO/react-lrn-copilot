@@ -5,10 +5,8 @@ import BwbHoofdstuk from "./bwb-hoofdstuk";
 import BwbParagraaf from "./bwb-paragraaf";
 
 function BwbRegelingTekst({
-  bwbId,
   regelingTekst,
 }: {
-  bwbId: string;
   regelingTekst: RegelingTekst | undefined;
 }) {
   if (!regelingTekst) {
@@ -28,7 +26,6 @@ function BwbRegelingTekst({
             <BwbHoofdstuk
               id={key}
               key={key}
-              bwbId={bwbId}
               hoofdstuk={hoofdstuk}
             />
           </div>

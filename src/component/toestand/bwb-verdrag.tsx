@@ -3,10 +3,8 @@ import type { Verdrag, Verdragtekst } from "../../api";
 import BwbVerdragTekst from "./bwb-verdrag-tekst";
 
 function BwbVerdrag({
-  bwbId,
   verdrag,
 }: {
-  bwbId: string;
   verdrag: Verdrag | undefined;
 }) {
   if (!verdrag) {
@@ -20,7 +18,6 @@ function BwbVerdrag({
           return (
             <BwbVerdragTekst
               key={key}
-              bwbId={bwbId}
               verdragTekst={verdragtekst}
             />
           );

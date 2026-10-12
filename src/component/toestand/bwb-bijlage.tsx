@@ -11,7 +11,7 @@ import BwbTable from "./bwb-table";
 import BwbDivisie from "./bwb-divisie";
 import { processKopTitle } from "./kop-processor";
 
-function BwbBijlage({ bijlage }: { bwbId?: string; bijlage?: Bijlage }) {
+function BwbBijlage({ bijlage }: { bijlage?: Bijlage }) {
   if (!bijlage) {
     return <></>;
   }

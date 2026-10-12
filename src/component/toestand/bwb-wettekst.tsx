@@ -8,10 +8,8 @@ import BwbArtikel from "./bwb-artikel";
 import BwbBoek from "./bwb-boek";
 
 function BwbWettekst({
-  bwbId,
   wettekst,
 }: {
-  bwbId: string;
   wettekst: Wettekst | undefined;
 }) {
   if (!wettekst) {
@@ -26,7 +24,6 @@ function BwbWettekst({
             <BwbTiteldeel
               id={key}
               key={key}
-              bwbId={bwbId}
               titeldeel={titeldeel}
             />
           </div>
@@ -39,7 +36,6 @@ function BwbWettekst({
             <BwbHoofdstuk
               key={key}
               id={key}
-              bwbId={bwbId}
               hoofdstuk={hoofdstuk}
             />
           </div>
@@ -50,7 +46,7 @@ function BwbWettekst({
         const key = boek.id ?? `boek_${index}`;
         return (
           <div key={key} className="boek">
-            <BwbBoek key={key} bwbId={bwbId} boek={boek} />
+            <BwbBoek key={key} boek={boek} />
           </div>
         );
       })}

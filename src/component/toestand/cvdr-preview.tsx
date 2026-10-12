@@ -47,7 +47,7 @@ export function CvdrPreviewContent({
                   rawText={wetgeving?.citeertitel?.text?.join(" ")}
                 />
               </Heading>
-              <BwbWetgeving bwbId={cvdrId} wetgeving={wetgeving} />
+              <BwbWetgeving wetgeving={wetgeving} />
             </div>
           </div>
         </BwbToestandContext.Provider>
