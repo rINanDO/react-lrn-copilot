@@ -1,9 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
+  buildCvdrCql,
   buildBwbCql,
   getSruSearchUrl,
+  hasCvdrSearchCriteria,
   hasSearchCriteria,
+  parseCvdrSearchResponse,
   parseSearchResponse,
+  searchCvdr,
   searchBwb,
   SruDiagnosticError,
 } from './sruRepository';
@@ -104,6 +108,51 @@ const diagnosticsXml = `<?xml version="1.0" encoding="UTF-8"?>
   </diagnostic>
 </diagnostics>`;
 
+const cvdrSuccessXml = `<?xml version="1.0" encoding="UTF-8"?>
+<searchRetrieveResponse xmlns="http://docs.oasis-open.org/ns/search-ws/sruResponse">
+  <version>2.0</version>
+  <numberOfRecords>2</numberOfRecords>
+  <records>
+    <record>
+      <recordData>
+        <gzd xmlns="http://standaarden.overheid.nl/sru"
+             xmlns:dcterms="http://purl.org/dc/terms/"
+             xmlns:overheid="http://standaarden.overheid.nl/owms/terms/"
+             xmlns:overheidcvdr="http://standaarden.overheid.nl/cvdr/terms/">
+          <originalData>
+            <meta>
+              <owmskern>
+                <dcterms:identifier>CVDR744131_2</dcterms:identifier>
+                <dcterms:title>Handhavingsbeleid Industriële Veiligheid</dcterms:title>
+                <dcterms:type>regeling</dcterms:type>
+                <overheid:authority>Gemeente Den Haag</overheid:authority>
+              </owmskern>
+            </meta>
+          </originalData>
+        </gzd>
+      </recordData>
+    </record>
+    <record>
+      <recordData>
+        <gzd xmlns="http://standaarden.overheid.nl/sru"
+             xmlns:dcterms="http://purl.org/dc/terms/"
+             xmlns:overheidcvdr="http://standaarden.overheid.nl/cvdr/terms/">
+          <originalData>
+            <meta>
+              <owmskern>
+                <dcterms:title>Via locatie</dcterms:title>
+              </owmskern>
+            </meta>
+          </originalData>
+          <enrichedData>
+            <overheidcvdr:locatie_toestand>https://repository.officiele-overheidspublicaties.nl/CVDR/CVDR123456/7/xml/CVDR123456_7.xml</overheidcvdr:locatie_toestand>
+          </enrichedData>
+        </gzd>
+      </recordData>
+    </record>
+  </records>
+</searchRetrieveResponse>`;
+
 const DATE_CLAUSES =
   'overheidbwb.geldigheidsdatum==2026-10-13 and overheidbwb.zichtdatum==2026-10-13';
 
@@ -157,9 +206,19 @@ describe('hasSearchCriteria', () => {
   });
 });
 
+describe('CVDR criteria', () => {
+  it('builds title-only CQL and detects blank criteria', () => {
+    expect(buildCvdrCql({ q: '  handhaving   veiligheid ' })).toBe(
+      'dcterms.title all "handhaving veiligheid"',
+    );
+    expect(hasCvdrSearchCriteria({ q: '   ' })).toBe(false);
+    expect(hasCvdrSearchCriteria({ q: 'veiligheid' })).toBe(true);
+  });
+});
+
 describe('getSruSearchUrl', () => {
   it('builds a searchRetrieve request for the BWB collection', () => {
-    const url = new URL(getSruSearchUrl('overheidbwb.titel all "wet"', 101, 50));
+    const url = new URL(getSruSearchUrl('overheidbwb.titel all "wet"', 101, 50, 'BWB'));
     expect(url.origin + url.pathname).toBe('https://zoekservice.overheid.nl/sru/Search');
     expect(Object.fromEntries(url.searchParams)).toEqual({
       operation: 'searchRetrieve',
@@ -169,6 +228,11 @@ describe('getSruSearchUrl', () => {
       startRecord: '101',
       maximumRecords: '50',
     });
+  });
+
+  it('builds a searchRetrieve request for the CVDR collection', () => {
+    const url = new URL(getSruSearchUrl('dcterms.title all "veiligheid"', 1, 50, 'CVDR'));
+    expect(url.searchParams.get('x-connection')).toBe('CVDR');
   });
 });
 
@@ -236,5 +300,66 @@ describe('searchBwb', () => {
   it('rejects on an HTTP error', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 503, statusText: 'Unavailable' })));
     await expect(searchBwb({ q: 'grondwet' })).rejects.toThrow('503');
+  });
+});
+
+describe('parseCvdrSearchResponse', () => {
+  it('maps CVDR records from identifier and location fallback', () => {
+    expect(parseCvdrSearchResponse(cvdrSuccessXml)).toEqual({
+      total: 2,
+      records: [
+        {
+          cvdrId: 'CVDR744131',
+          expression: '2',
+          title: 'Handhavingsbeleid Industriële Veiligheid',
+          type: 'regeling',
+          authority: 'Gemeente Den Haag',
+        },
+        {
+          cvdrId: 'CVDR123456',
+          expression: '7',
+          title: 'Via locatie',
+          type: undefined,
+          authority: undefined,
+        },
+      ],
+    });
+  });
+
+  it('throws an SruDiagnosticError for diagnostics', () => {
+    expect(() => parseCvdrSearchResponse(diagnosticsXml)).toThrow(SruDiagnosticError);
+  });
+});
+
+describe('searchCvdr', () => {
+  it('requests the CVDR collection and parses the response', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(cvdrSuccessXml, { status: 200 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(searchCvdr({ q: 'veiligheid' }, { page: 2 })).resolves.toEqual({
+      total: 2,
+      records: [
+        {
+          cvdrId: 'CVDR744131',
+          expression: '2',
+          title: 'Handhavingsbeleid Industriële Veiligheid',
+          type: 'regeling',
+          authority: 'Gemeente Den Haag',
+        },
+        {
+          cvdrId: 'CVDR123456',
+          expression: '7',
+          title: 'Via locatie',
+          type: undefined,
+          authority: undefined,
+        },
+      ],
+    });
+
+    const [url] = fetchMock.mock.calls[0];
+    const params = new URL(url).searchParams;
+    expect(params.get('x-connection')).toBe('CVDR');
+    expect(params.get('startRecord')).toBe('51');
+    expect(params.get('query')).toBe('dcterms.title all "veiligheid"');
   });
 });
