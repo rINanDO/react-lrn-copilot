@@ -5,6 +5,7 @@ import BwbExpressions from "../component/bwb/bwb-expressions";
 import CvdrPage from "../component/cvdr/cvdr-view";
 import BwbLandingPage from "../component/page/bwb-landing-page";
 import BwbSearchPage from "../component/search/bwb-search-page";
+import CvdrSearchPage from "../component/search/cvdr-search-page";
 
 export const routeObjects: RouteObject[] = [
   {
@@ -31,6 +32,11 @@ export const routeObjects: RouteObject[] = [
     path: appRoutes.cvdr,
     handle: { title: "Wetten" },
     element: <CvdrPage />,
+  },
+  {
+    path: appRoutes.cvdrSearch,
+    handle: { title: "Zoeken – CVDR" },
+    element: <CvdrSearchPage />,
   },
   {
     path: appRoutes.bwbtt,

@@ -10,6 +10,7 @@ export const PAGE_SIZE = 50;
 const NS_DCTERMS = "http://purl.org/dc/terms/";
 const NS_OVERHEID = "http://standaarden.overheid.nl/owms/terms/";
 const NS_OVERHEIDBWB = "http://standaarden.overheid.nl/bwb/terms/";
+const NS_OVERHEIDCVDR = "http://standaarden.overheid.nl/cvdr/terms/";
 
 /** Search criteria; blank values are left out of the query. */
 export type BwbSearchCriteria = {
@@ -37,6 +38,23 @@ export type BwbSearchRecord = {
 export type BwbSearchResult = {
   total: number;
   records: BwbSearchRecord[];
+};
+
+export type CvdrSearchCriteria = {
+  q?: string;
+};
+
+export type CvdrSearchRecord = {
+  cvdrId: string;
+  title: string;
+  expression: string;
+  type?: string;
+  authority?: string;
+};
+
+export type CvdrSearchResult = {
+  total: number;
+  records: CvdrSearchRecord[];
 };
 
 /** An SRU diagnostic: the service answered, but could not run the query. */
@@ -83,16 +101,21 @@ export function hasSearchCriteria(criteria: BwbSearchCriteria): boolean {
   );
 }
 
+export function hasCvdrSearchCriteria(criteria: CvdrSearchCriteria): boolean {
+  return normalize(criteria.q) !== "";
+}
+
 export function getSruSearchUrl(
   cql: string,
   startRecord: number,
   maximumRecords: number,
+  connection = "BWB",
   baseUrl = SRU_BASE_URL,
 ): string {
   const params = new URLSearchParams({
     operation: "searchRetrieve",
     version: "2.0",
-    "x-connection": "BWB",
+    "x-connection": connection,
     query: cql,
     startRecord: String(startRecord),
     maximumRecords: String(maximumRecords),
@@ -145,6 +168,43 @@ function parseRecord(record: Element): BwbSearchRecord | undefined {
   };
 }
 
+function parseCvdrIdentifier(
+  identifier: string | undefined,
+): { cvdrId: string; expression: string } | undefined {
+  const match = identifier?.match(/^(CVDR\d+)_([0-9]+)$/);
+  return match ? { cvdrId: match[1], expression: match[2] } : undefined;
+}
+
+function parseCvdrLocation(
+  location: string | undefined,
+): { cvdrId: string; expression: string } | undefined {
+  const match = location?.match(/\/(CVDR\d+)\/([0-9]+)\//);
+  return match ? { cvdrId: match[1], expression: match[2] } : undefined;
+}
+
+function parseCvdrRecord(record: Element): CvdrSearchRecord | undefined {
+  const texts = (namespace: string, name: string) =>
+    Array.from(record.getElementsByTagNameNS(namespace, name))
+      .map((element) => element.textContent?.trim() ?? "")
+      .filter((text) => text !== "");
+  const text = (namespace: string, name: string) => texts(namespace, name)[0];
+
+  const fromIdentifier = parseCvdrIdentifier(text(NS_DCTERMS, "identifier"));
+  const fromLocation =
+    parseCvdrLocation(text(NS_OVERHEIDCVDR, "locatie_toestand")) ??
+    parseCvdrLocation(text(NS_OVERHEIDCVDR, "locatie_expression"));
+  const parts = fromIdentifier ?? fromLocation;
+  if (!parts) return undefined;
+
+  return {
+    cvdrId: parts.cvdrId,
+    expression: parts.expression,
+    title: text(NS_DCTERMS, "title") ?? parts.cvdrId,
+    type: text(NS_DCTERMS, "type"),
+    authority: text(NS_OVERHEID, "authority"),
+  };
+}
+
 /** Parses an SRU `searchRetrieveResponse`; throws `SruDiagnosticError` on a `diagnostics` answer. */
 export function parseSearchResponse(xml: string): BwbSearchResult {
   const document = new DOMParser().parseFromString(xml, "application/xml");
@@ -154,15 +214,7 @@ export function parseSearchResponse(xml: string): BwbSearchResult {
   }
 
   const root = document.documentElement;
-  if (root.localName === "diagnostics") {
-    const diagnostic = (name: string) =>
-      root.getElementsByTagNameNS("*", name)[0]?.textContent?.trim();
-    throw new SruDiagnosticError(
-      [diagnostic("uri"), diagnostic("message"), diagnostic("details")]
-        .filter(Boolean)
-        .join(" – "),
-    );
-  }
+  if (root.localName === "diagnostics") throw sruDiagnostic(root);
 
   const childText = (name: string) =>
     Array.from(root.children).find((child) => child.localName === name)
@@ -170,6 +222,40 @@ export function parseSearchResponse(xml: string): BwbSearchResult {
   const records = Array.from(root.getElementsByTagNameNS("*", "record"))
     .map(parseRecord)
     .filter((record): record is BwbSearchRecord => record !== undefined);
+  return { total: Number(childText("numberOfRecords") ?? 0) || 0, records };
+}
+
+export function buildCvdrCql(criteria: CvdrSearchCriteria): string {
+  const q = normalize(criteria.q);
+  return q ? `dcterms.title all ${quoteCql(q)}` : "";
+}
+
+function sruDiagnostic(root: Element): SruDiagnosticError {
+  const diagnostic = (name: string) =>
+    root.getElementsByTagNameNS("*", name)[0]?.textContent?.trim();
+  return new SruDiagnosticError(
+    [diagnostic("uri"), diagnostic("message"), diagnostic("details")]
+      .filter(Boolean)
+      .join(" – "),
+  );
+}
+
+export function parseCvdrSearchResponse(xml: string): CvdrSearchResult {
+  const document = new DOMParser().parseFromString(xml, "application/xml");
+  const parseError = document.querySelector("parsererror");
+  if (parseError) {
+    throw new Error(`Invalid SRU XML: ${parseError.textContent}`);
+  }
+
+  const root = document.documentElement;
+  if (root.localName === "diagnostics") throw sruDiagnostic(root);
+
+  const childText = (name: string) =>
+    Array.from(root.children).find((child) => child.localName === name)
+      ?.textContent;
+  const records = Array.from(root.getElementsByTagNameNS("*", "record"))
+    .map(parseCvdrRecord)
+    .filter((record): record is CvdrSearchRecord => record !== undefined);
   return { total: Number(childText("numberOfRecords") ?? 0) || 0, records };
 }
 
@@ -193,8 +279,29 @@ export async function searchBwb(
     buildBwbCql(criteria, date),
     (page - 1) * PAGE_SIZE + 1,
     PAGE_SIZE,
+    "BWB",
     baseUrl,
   );
   const xml = await fetchXml(url, "zoekresultaten", { signal });
   return parseSearchResponse(xml);
+}
+
+/** Searches the CVDR collection; `page` is 1-based. */
+export async function searchCvdr(
+  criteria: CvdrSearchCriteria,
+  {
+    page = 1,
+    baseUrl,
+    signal,
+  }: { page?: number } & Pick<FetchOptions, "baseUrl" | "signal"> = {},
+): Promise<CvdrSearchResult> {
+  const url = getSruSearchUrl(
+    buildCvdrCql(criteria),
+    (page - 1) * PAGE_SIZE + 1,
+    PAGE_SIZE,
+    "CVDR",
+    baseUrl,
+  );
+  const xml = await fetchXml(url, "zoekresultaten", { signal });
+  return parseCvdrSearchResponse(xml);
 }
