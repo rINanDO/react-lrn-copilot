@@ -1,15 +1,21 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, type RouteObject } from "react-router-dom";
 import { appRoutes } from "./routes";
 import ToestandPage from "../component/bwb/toestand-view";
 import BwbExpressions from "../component/bwb/bwb-expressions";
 import CvdrPage from "../component/cvdr/cvdr-view";
 import BwbLandingPage from "../component/page/bwb-landing-page";
+import BwbSearchPage from "../component/search/bwb-search-page";
 
-export const router = createBrowserRouter([
+export const routeObjects: RouteObject[] = [
   {
     path: appRoutes.bwbLanding,
     handle: { title: "Wetten" },
     element: <BwbLandingPage />,
+  },
+  {
+    path: appRoutes.bwbSearch,
+    handle: { title: "Zoeken – Wetten" },
+    element: <BwbSearchPage />,
   },
   {
     path: appRoutes.bwbExpressions,
@@ -31,4 +37,6 @@ export const router = createBrowserRouter([
     handle: { title: "Wetten" },
     element: <ToestandPage isToekomstig={true} />,
   },
-]);
+];
+
+export const router = createBrowserRouter(routeObjects);

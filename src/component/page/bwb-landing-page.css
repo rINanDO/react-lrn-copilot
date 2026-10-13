@@ -61,28 +61,6 @@
   margin: 2rem 0 0;
 }
 
-.bwb-landing-page__modal-backdrop {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: rgba(12, 24, 39, 0.4);
-  z-index: 10;
-}
-
-.bwb-landing-page__dialog {
-  width: min(34rem, calc(100vw - 2rem));
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: auto;
-  padding: 1.5rem;
-  border: 1px solid #dfe7ee;
-  border-radius: 1rem;
-  box-shadow: 0 1.5rem 2.75rem rgba(20, 36, 51, 0.16);
-  background: #fff;
-}
-
 @media (max-width: 640px) {
   .bwb-landing-page__search {
     flex-direction: column;

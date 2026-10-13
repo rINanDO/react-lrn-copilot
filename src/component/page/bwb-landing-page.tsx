@@ -1,19 +1,25 @@
 import { type FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Heading,
   Link,
   PrimaryActionButton,
   TextInput,
 } from "@rijkshuisstijl-community/components-react/no-side-effects";
+import { appRoutes } from "../../router/routes";
 import "./bwb-landing-page.css";
 
 function BwbLandingPage() {
   const [query, setQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsOpen(true);
+    const q = query.trim();
+    navigate({
+      pathname: appRoutes.bwbSearch,
+      search: q ? `?${new URLSearchParams({ q })}` : "",
+    });
   };
 
   return (
@@ -56,25 +62,6 @@ function BwbLandingPage() {
           </ul>
         </header>
       </div>
-
-      {isOpen && (
-        <div className="bwb-landing-page__modal-backdrop" aria-hidden={!isOpen}>
-          <div
-            aria-labelledby="bwb-progress-title"
-            aria-modal="true"
-            className="bwb-landing-page__dialog"
-            role="dialog"
-          >
-            <Heading level={2} id="bwb-progress-title">
-              Zoeken
-            </Heading>
-            <p>Work in progress</p>
-            <PrimaryActionButton type="button" onClick={() => setIsOpen(false)}>
-              Sluiten
-            </PrimaryActionButton>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
