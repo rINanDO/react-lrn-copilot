@@ -7,26 +7,26 @@ Lets users find CVDR regulations from the app by search term, inspect paged resu
 ## ADDED Requirements
 
 ### Requirement: CVDR search route and URL contract
-The system SHALL expose a CVDR search page at `/cvdr/zoeken`, and the query string SHALL define the full search state via `q` (text) and `pagina` (1-based page), so reloading, sharing, and browser navigation restore the same result set.
+The system SHALL expose a CVDR search page at `/cvdr`, and the query string SHALL define the full search state via `q` (text) and `pagina` (1-based page), so reloading, sharing, and browser navigation restore the same result set.
 
 #### Scenario: Bookmarked CVDR search
-- **WHEN** a user opens `/cvdr/zoeken?q=handhaving&pagina=2`
+- **WHEN** a user opens `/cvdr?q=handhaving&pagina=2`
 - **THEN** the page shows CVDR results for `handhaving` on page 2 with the search box prefilled
 
 #### Scenario: Invalid page value
-- **WHEN** a user opens `/cvdr/zoeken?pagina=abc`
+- **WHEN** a user opens `/cvdr?pagina=abc`
 - **THEN** the first page is used
 
 ### Requirement: CVDR SRU search execution
 The system SHALL search through SRU `searchRetrieve` at `https://zoekservice.overheid.nl/sru/Search` with `x-connection=CVDR`, SHALL request XML responses, and SHALL not call SRU when `q` is blank.
 
 #### Scenario: Search with text
-- **WHEN** the URL is `/cvdr/zoeken?q=veiligheid`
+- **WHEN** the URL is `/cvdr?q=veiligheid`
 - **THEN** the app sends one CVDR SRU request and displays returned matches
 
 #### Scenario: No text
-- **WHEN** the URL is `/cvdr/zoeken` without `q`
-- **THEN** the page shows an idle prompt and no request is sent
+- **WHEN** the URL is `/cvdr` without `q`
+- **THEN** the page keeps the search form visible, hides the result block, and sends no request
 
 ### Requirement: CVDR result rendering and navigation
 The search page SHALL show a total-count status, paged results, and links to `/cvdr/<cvdrId>/<expression>`. When a search has `q`, each link SHALL pass `q` as query-string parameter.
