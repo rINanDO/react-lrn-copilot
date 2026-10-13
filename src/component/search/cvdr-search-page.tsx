@@ -158,25 +158,26 @@ function CvdrSearchPage() {
           </p>
         </header>
 
-        <section className="cvdr-search-page__results" aria-label="Zoekresultaten">
-          {state.status === "idle" && <p>Typ een zoekterm om te zoeken.</p>}
-          {state.status === "loading" && (
-            <div className="cvdr-search-page__loading">
-              <p role="status">Zoeken…</p>
-              <LinearProgress aria-label="Zoeken" />
-            </div>
-          )}
-          {state.status === "error" && <LoadError error={state.error} />}
-          {state.status === "loaded" && (
-            <SearchResults
-              page={page}
-              q={q}
-              records={state.result.records}
-              total={state.result.total}
-              pageSearch={pageSearch}
-            />
-          )}
-        </section>
+        {state.status !== "idle" && (
+          <section className="cvdr-search-page__results" aria-label="Zoekresultaten">
+            {state.status === "loading" && (
+              <div className="cvdr-search-page__loading">
+                <p role="status">Zoeken…</p>
+                <LinearProgress aria-label="Zoeken" />
+              </div>
+            )}
+            {state.status === "error" && <LoadError error={state.error} />}
+            {state.status === "loaded" && (
+              <SearchResults
+                page={page}
+                q={q}
+                records={state.result.records}
+                total={state.result.total}
+                pageSearch={pageSearch}
+              />
+            )}
+          </section>
+        )}
       </div>
     </div>
   );

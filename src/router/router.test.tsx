@@ -22,7 +22,7 @@ describe('router', () => {
     ['/bwb/zoeken?q=grondwet', 'search page'],
     ['/bwb/BWBR0001840', 'expressions page'],
     ['/bwb/BWBR0001840/2023-02-22_0', 'toestand page'],
-    ['/cvdr/zoeken?q=handhaving', 'cvdr search page'],
+    ['/cvdr?q=handhaving', 'cvdr search page'],
     ['/cvdr/CVDR744131/2', 'cvdr page'],
   ])('renders %s as the %s', (url, page) => {
     renderAt(url);
