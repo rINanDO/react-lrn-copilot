@@ -1,0 +1,132 @@
+.bwb-search-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f3f6f9 0%, #eef3f6 100%);
+  color: #1d1d1d;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.bwb-search-page__shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+
+.bwb-search-page__header,
+.bwb-search-page__results {
+  background: #ffffff;
+  border: 1px solid #dfe7ee;
+  border-radius: 1.25rem;
+  box-shadow: 0 0.75rem 2rem rgba(20, 36, 51, 0.08);
+  padding: clamp(1.5rem, 2.5vw, 3rem);
+}
+
+.bwb-search-page__results {
+  margin-top: 1.5rem;
+}
+
+.bwb-search-page__eyebrow {
+  color: #154273;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.bwb-search-page__search {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  max-width: 46rem;
+}
+
+.bwb-search-page__search .rhc-text-input {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+.bwb-search-page__search .rhc-button {
+  min-height: 3rem;
+}
+
+.bwb-search-page__note {
+  color: #535353;
+  font-size: 0.95rem;
+  margin: 0.75rem 0 0;
+}
+
+.bwb-search-page__filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.bwb-search-page__filters select {
+  width: 100%;
+  max-width: 100%;
+}
+
+.bwb-search-page__count {
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.bwb-search-page__list {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.bwb-search-page__result {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #dfe7ee;
+}
+
+.bwb-search-page__result:last-child {
+  border-bottom: none;
+}
+
+.bwb-search-page__result-link {
+  color: #154273;
+  font-size: 1.1rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.bwb-search-page__result-details {
+  color: #535353;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+.bwb-search-page__paging {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.bwb-search-page__paging a {
+  color: #154273;
+}
+
+.bwb-search-page__loading {
+  max-width: 480px;
+}
+
+@media (max-width: 640px) {
+  .bwb-search-page__shell {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .bwb-search-page__search {
+    flex-direction: column;
+  }
+
+  .bwb-search-page__search .rhc-button {
+    width: 100%;
+  }
+}

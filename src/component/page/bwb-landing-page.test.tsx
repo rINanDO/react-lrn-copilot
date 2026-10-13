@@ -1,21 +1,42 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
+import { afterEach, describe, expect, it } from "vitest";
 import BwbLandingPage from "./bwb-landing-page";
 
+afterEach(cleanup);
+
+function SearchMarker() {
+  const location = useLocation();
+  return <div data-testid="search-page">{location.pathname + location.search}</div>;
+}
+
+function search(text: string) {
+  render(
+    <MemoryRouter initialEntries={["/bwb"]}>
+      <Routes>
+        <Route path="/bwb" element={<BwbLandingPage />} />
+        <Route path="/bwb/zoeken" element={<SearchMarker />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  fireEvent.change(screen.getByRole("textbox", { name: /zoek in wetten/i }), {
+    target: { value: text },
+  });
+  fireEvent.click(screen.getByRole("button", { name: /zoeken/i }));
+}
+
 describe("BwbLandingPage", () => {
-  it("shows a dismissible work-in-progress dialog when submitting the search form", () => {
-    render(<BwbLandingPage />);
+  it("navigates to the search results for the trimmed search text", () => {
+    search("  grondwet ");
 
-    fireEvent.change(screen.getByRole("textbox", { name: /zoek in wetten/i }), {
-      target: { value: "grondwet" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /zoeken/i }));
+    expect(screen.getByTestId("search-page")).toHaveTextContent("/bwb/zoeken?q=grondwet");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
 
-    expect(screen.getByRole("dialog", { name: /zoeken/i })).toBeInTheDocument();
-    expect(screen.getByText("Work in progress")).toBeInTheDocument();
+  it("navigates to the search page without q for a blank search", () => {
+    search("   ");
 
-    fireEvent.click(screen.getByRole("button", { name: /sluiten/i }));
-
-    expect(screen.queryByText("Work in progress")).not.toBeInTheDocument();
+    expect(screen.getByTestId("search-page").textContent).toBe("/bwb/zoeken");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });
