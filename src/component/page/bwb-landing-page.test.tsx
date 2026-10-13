@@ -1,21 +1,42 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { describe, expect, it, vi } from "vitest";
 import BwbLandingPage from "./bwb-landing-page";
+import { searchBwb } from "../../api/bwbSearchRepository";
+
+vi.mock("../../api/bwbSearchRepository", () => ({
+  searchBwb: vi.fn(),
+}));
 
 describe("BwbLandingPage", () => {
-  it("shows a dismissible work-in-progress dialog when submitting the search form", () => {
-    render(<BwbLandingPage />);
+  it("searches via SRU and shows links to BWB regulations", async () => {
+    vi.mocked(searchBwb).mockResolvedValue({
+      numberOfRecords: 1,
+      records: [{ bwbId: "BWBR0001840", title: "Grondwet" }],
+    });
+
+    render(
+      <MemoryRouter>
+        <BwbLandingPage />
+      </MemoryRouter>,
+    );
 
     fireEvent.change(screen.getByRole("textbox", { name: /zoek in wetten/i }), {
       target: { value: "grondwet" },
     });
     fireEvent.click(screen.getByRole("button", { name: /zoeken/i }));
 
-    expect(screen.getByRole("dialog", { name: /zoeken/i })).toBeInTheDocument();
-    expect(screen.getByText("Work in progress")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(searchBwb).toHaveBeenCalledWith(
+        "grondwet",
+        expect.objectContaining({ startRecord: 1, maximumRecords: 20 }),
+      );
+    });
 
-    fireEvent.click(screen.getByRole("button", { name: /sluiten/i }));
-
-    expect(screen.queryByText("Work in progress")).not.toBeInTheDocument();
+    expect(await screen.findByText("Grondwet")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /open regeling/i })).toHaveAttribute(
+      "href",
+      "/bwb/BWBR0001840",
+    );
   });
 });
