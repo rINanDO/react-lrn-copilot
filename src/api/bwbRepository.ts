@@ -1,4 +1,4 @@
-import type { Toestand } from "./types.gen";
+import type { Toestand, wetstechnischeinformatie } from "./types.gen";
 import { mapElement } from "./xmlToModel";
 import {
   fetchXml,
@@ -125,4 +125,35 @@ export async function getManifest(
     );
   }
   return parseManifest(await response.text());
+}
+
+export function getWetTechnischeInformatieUrl(
+  bwbId: string,
+  baseUrl = WETTEN_REPOSITORY_BASE_URL,
+): string {
+  const id = encodeURIComponent(bwbId);
+  return `${baseUrl}/bwb/${id}/${id}.wti`;
+}
+
+export function parseWetTechnischeInformatie(
+  xml: string,
+): wetstechnischeinformatie {
+  const document = parseXmlDocument(xml, "wetstechnische informatie");
+  return mapElement(
+    document.documentElement,
+    "wetstechnischeinformatie",
+  ) as wetstechnischeinformatie;
+}
+
+/** Fetches the wetstechnische informatie of a BWB work (e.g. `BWBR0001840`). */
+export async function getWetTechnischeInformatie(
+  bwbId: string,
+  { baseUrl, ...options }: FetchOptions = {},
+): Promise<wetstechnischeinformatie> {
+  const xml = await fetchXml(
+    getWetTechnischeInformatieUrl(bwbId, baseUrl),
+    `wetstechnische informatie ${bwbId}`,
+    options,
+  );
+  return parseWetTechnischeInformatie(xml);
 }
