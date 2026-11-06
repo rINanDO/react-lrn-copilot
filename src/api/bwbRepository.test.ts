@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   getToestand,
+  getManifestUrl,
   getWetTechnischeInformatie,
   getWetTechnischeInformatieUrl,
   parseManifest,
@@ -131,6 +132,17 @@ const wtiXml = `<?xml version="1.0" encoding="utf-8"?>
     </owms:kern>
   </owms:meta>
 </wetstechnische-informatie>`;
+
+describe('getManifestUrl', () => {
+  it('points to the manifest of current or future versions', () => {
+    expect(getManifestUrl('BWBR0001840')).toBe(
+      'https://repository.officiele-overheidspublicaties.nl/BWB/BWBR0001840/manifest.xml',
+    );
+    expect(getManifestUrl('BWBR0001840', undefined, true)).toBe(
+      'https://repository.officiele-overheidspublicaties.nl/BWBTT/BWBR0001840/manifest.xml',
+    );
+  });
+});
 
 describe('getWetTechnischeInformatieUrl', () => {
   it('points to the .wti document of the work', () => {
