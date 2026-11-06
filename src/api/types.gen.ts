@@ -5206,3 +5206,432 @@ export type GetApiBeheerSettingsResponses = {
 
 export type GetApiBeheerSettingsResponse =
   GetApiBeheerSettingsResponses[keyof GetApiBeheerSettingsResponses];
+
+// Wetstechnische informatie (WTI), hand-written from WtiModel2.cs in the
+// UpdateService: not part of the OpenAPI spec, so regenerating this file with
+// @hey-api/openapi-ts removes these types. Type names follow the C# classes.
+// Fields follow the XML, as xmlToModel expects: `algemene-informatie` becomes
+// `algemeneInformatie`, and a list keeps its wrapper element as an object.
+
+export type wetstechnischeinformatie = {
+  bwbId?: string | null;
+  algemeneInformatie?: algemeneinformatie | null;
+  gerelateerdeRegelgeving?: gerelateerderegelgeving | null;
+  wijzigingen?: wijzigingen | null;
+  aankondigingen?: aankondigingen | null;
+  meta?: meta | null;
+};
+
+export type algemeneinformatie = {
+  eerstverantwoordelijke?: string | null;
+  afkortingen?: algemeneinformatieAfkortingen | null;
+  nietOfficieleTitels?: algemeneinformatieNietOfficieleTitels | null;
+  citeertitel?: algemeneinformatieCiteertitel | null;
+  citeertitels?: algemeneinformatieCiteertitels | null;
+  soortRegeling?: string | null;
+  identificatienummer?: string | null;
+  datumMaterieleUitwerking?: string | null;
+  opmerkingen?: opmerkingen | null;
+  departementaalKenmerk?: string | null;
+  totstandkoming?: algemeneinformatieTotstandkoming | null;
+  extraInformatie?: string | null;
+  rechtsgebieden?: algemeneinformatieRechtsgebieden | null;
+  overheidsdomeinen?: algemeneinformatieOverheidsdomeinen | null;
+  taxonomieen?: algemeneinformatieTaxonomieen | null;
+  gegenereerd?: string | null;
+};
+
+export type algemeneinformatieAfkortingen = {
+  afkorting?: Array<string> | null;
+};
+
+export type algemeneinformatieNietOfficieleTitels = {
+  nietOfficieleTitel?: Array<string> | null;
+};
+
+export type algemeneinformatieCiteertitel = {
+  status?: string | null;
+  text?: string | null;
+};
+
+export type algemeneinformatieCiteertitels = {
+  citeertitel?: Array<algemeneinformatieCiteertitel1> | null;
+};
+
+export type algemeneinformatieCiteertitel1 = {
+  status?: string | null;
+  geldigTot?: string | null;
+  geldigVan?: string | null;
+  zichtbaarTot?: string | null;
+  zichtbaarVan?: string | null;
+  text?: string | null;
+};
+
+export type algemeneinformatieTotstandkoming = {
+  plaats?: string | null;
+  datum?: string | null;
+};
+
+export type algemeneinformatieRechtsgebieden = {
+  rechtsgebied?: Array<algemeneinformatieRechtsgebied> | null;
+};
+
+export type algemeneinformatieRechtsgebied = {
+  hoofdgebied?: string | null;
+  specifiekgebied?: string | null;
+};
+
+export type algemeneinformatieOverheidsdomeinen = {
+  overheidsdomein?: Array<string> | null;
+};
+
+export type algemeneinformatieTaxonomieen = {
+  taxonomie?: Array<string> | null;
+};
+
+export type opmerkingen = {
+  opmerking?: Array<opmerkingenOpmerking> | null;
+};
+
+export type opmerkingenOpmerking = {
+  al?: Array<al> | null;
+  text?: Array<string> | null;
+  type?: string | null;
+};
+
+export type al = {
+  text?: Array<string> | null;
+};
+
+export type extref = {
+  label?: string | null;
+  groep?: string | null;
+  doc?: string | null;
+  anker?: string | null;
+  bwbId?: string | null;
+  eurlex?: string | null;
+  labelId?: string | null;
+  verwijzingId?: string | null;
+  text?: string | null;
+};
+
+export type gerelateerderegeling = {
+  extref?: extref | null;
+  text?: Array<string> | null;
+  bwbId?: string | null;
+  geldigTot?: string | null;
+  geldigVan?: string | null;
+  zichtbaarTot?: string | null;
+  zichtbaarVan?: string | null;
+};
+
+export type gerelateerderegelingen = {
+  gerelateerdeRegeling?: Array<gerelateerderegeling> | null;
+};
+
+export type gerelateerderegelingVerwijzingDoor = {
+  gerelateerdRegelingelement?: Array<gerelateerderegeling> | null;
+};
+
+export type gerelateerderegelgeving = {
+  regeling?: gerelateerderegelgevingRegeling | null;
+  regelingelementen?: gerelateerderegelgevingRegelingelementen | null;
+  gegenereerd?: string | null;
+};
+
+export type gerelateerderegelgevingRegeling = {
+  grondslagen?: gerelateerderegelgevingRegelingGrondslagen | null;
+  wetsfamilie?: gerelateerderegelingen | null;
+  grondslagVoor?: gerelateerderegelingen | null;
+  wettelijkeBevoegdheidVoor?: gerelateerderegelingen | null;
+  verwijzingDoor?: gerelateerderegelingVerwijzingDoor | null;
+};
+
+export type gerelateerderegelgevingRegelingGrondslagen = {
+  grondslag?: Array<gerelateerderegelgevingRegelingGrondslag> | null;
+};
+
+export type gerelateerderegelgevingRegelingGrondslag = {
+  extref?: Array<extref> | null;
+  text?: Array<string> | null;
+  bwbId?: string | null;
+  geldigTot?: string | null;
+  geldigVan?: string | null;
+  zichtbaarTot?: string | null;
+  zichtbaarVan?: string | null;
+};
+
+export type gerelateerderegelgevingRegelingelementen = {
+  regelingelement?: Array<gerelateerderegelgevingRegelingelement> | null;
+};
+
+export type gerelateerderegelgevingRegelingelement = {
+  grondslagVoor?: gerelateerderegelingen | null;
+  wettelijkeBevoegdheidVoor?: gerelateerderegelingen | null;
+  verwijzingDoor?: gerelateerderegelingVerwijzingDoor | null;
+  labelId?: string | null;
+  xpath?: string | null;
+  groep?: string | null;
+  label?: string | null;
+};
+
+export type wijzigingen = {
+  regeling?: wijzigingenRegeling | null;
+  regelingelementen?: wijzigingenRegelingelementen | null;
+  gegenereerd?: string | null;
+};
+
+export type wijzigingenRegeling = {
+  datum?: Array<wijzigingenDatum> | null;
+};
+
+export type wijzigingenDatum = {
+  details?: Array<wijzigingenDatumDetails> | null;
+  waarde?: string | null;
+};
+
+export type wijzigingenDatumDetails = {
+  terugwerkendeKracht?: wijzigingenDatumDetailsTerugwerkendeKracht | null;
+  betreft?: string | null;
+  ontstaansbron?: ontstaansbron | null;
+  inwerkingtreding?: inwerkingtreding | null;
+};
+
+export type wijzigingenDatumDetailsTerugwerkendeKracht = {
+  terugwerkendeKrachtDatum?: Array<terugwerkendekrachtdatumgroot> | null;
+};
+
+export type wijzigingenRegelingelementen = {
+  regelingelement?: Array<wijzigingenRegelingelement> | null;
+};
+
+export type wijzigingenRegelingelement = {
+  datum?: Array<wijzigingenRegelingelementDatum> | null;
+  labelId?: string | null;
+};
+
+export type wijzigingenRegelingelementDatum = {
+  details?: Array<wijzigingenRegelingelementDatumDetails> | null;
+  waarde?: string | null;
+  label?: string | null;
+  versieId?: string | null;
+};
+
+export type wijzigingenRegelingelementDatumDetails = {
+  terugwerkendeKracht?: wijzigingenRegelingelementDatumDetailsTerugwerkendeKracht | null;
+  betreft?: string | null;
+  ontstaansbron?: ontstaansbron | null;
+  inwerkingtreding?: inwerkingtreding | null;
+  opmerkingen?: opmerkingen | null;
+  isvoorafgaand?: boolean | null;
+};
+
+export type wijzigingenRegelingelementDatumDetailsTerugwerkendeKracht = {
+  terugwerkendeKrachtDatum?: Array<terugwerkendekrachtdatumklein> | null;
+};
+
+export type ontstaansbron = {
+  bron?: Array<bron_groot> | null;
+};
+
+export type inwerkingtreding = {
+  bron?: Array<bron_klein> | null;
+};
+
+export type bron_klein = {
+  dossiernummer?: string | null;
+  ondertekening?: string | null;
+  bekendmaking?: bron_kleinBekendmaking | null;
+  type?: string | null;
+  isvoorlopigetoepassing?: boolean | null;
+  istotstandkoming?: boolean | null;
+};
+
+export type bron_groot = {
+  dossiernummer?: string | null;
+  ondertekening?: string | null;
+  bekendmaking?: bron_kleinBekendmaking | null;
+  kenmerk?: string | null;
+  type?: string | null;
+  isvoorlopigetoepassing?: boolean | null;
+  istotstandkoming?: boolean | null;
+};
+
+export type bron_kleinBekendmaking = {
+  publicatiedatum?: string | null;
+  publicatiejaar?: string | null;
+  publicatienummer?: string | null;
+  rectificatie?: Array<bron_kleinBekendmakingRectificatie> | null;
+  kenmerk?: string | null;
+  soort?: string | null;
+  urlidentifier?: string | null;
+};
+
+export type bron_kleinBekendmakingRectificatie = {
+  publicatiedatum?: string | null;
+  publicatiejaar?: string | null;
+  publicatienummer?: string | null;
+  soort?: string | null;
+  urlidentifier?: string | null;
+};
+
+export type terugwerkendekrachtdatumklein = {
+  datumScope?: string | null;
+  waarde?: string | null;
+};
+
+export type terugwerkendekrachtdatumgroot = {
+  artikelen?: terugwerkendekrachtdatumgrootArtikelen | null;
+  datumScope?: string | null;
+  waarde?: string | null;
+};
+
+export type terugwerkendekrachtdatumgrootArtikelen = {
+  label?: Array<string> | null;
+  betreftalleonderdelen?: boolean | null;
+};
+
+export type aankondigingen = {
+  aankondiging?: Array<aankondigingenAankondiging> | null;
+};
+
+export type aankondigingenAankondiging = {
+  labelId?: string | null;
+  opschrift?: string | null;
+  ingangsdatum?: Array<aankondigingenAankondigingIngangsdatum> | null;
+  terugwerkendDatum?: aankondigingenAankondigingTerugwerkenddatum | null;
+  hierarchy?: aankondigingenAankondigingHierarchy | null;
+  effect?: string | null;
+};
+
+export type aankondigingenAankondigingIngangsdatum = {
+  type?: string | null;
+  text?: string | null;
+};
+
+export type aankondigingenAankondigingTerugwerkenddatum = {
+  datumScope?: string | null;
+  text?: string | null;
+};
+
+export type aankondigingenAankondigingHierarchy = {
+  selfId?: string | null;
+  parentId?: string | null;
+  previousSiblingId?: string | null;
+};
+
+export type meta = {
+  kern?: metaKern | null;
+  mantel?: metaMantel | null;
+  bwb?: metaBwb | null;
+  config?: string | null;
+  owmsVersion?: string | null;
+};
+
+export type metaKern = {
+  identifier?: string | null;
+  title?: FreeText | null;
+  language?: string | null;
+  type?: Array<CVorPointer> | null;
+  creator?: CVorPointer | null;
+  modified?: string | null;
+  spatial?: Location | null;
+  temporal?: PeriodOfTime | null;
+  authority?: CVorPointer1 | null;
+};
+
+export type metaMantel = {
+  abstract?: Array<FreeText> | null;
+  accessRights?: Array<TripleType> | null;
+  alternative?: Array<FreeText> | null;
+  audience?: Array<CVorPointer> | null;
+  available?: Array<PeriodOfTime> | null;
+  conformsTo?: Array<InformationObject> | null;
+  contributor?: Array<TripleType> | null;
+  coverage?: Array<FreeText> | null;
+  created?: Array<string> | null;
+  date?: Array<string> | null;
+  dateAccepted?: Array<string> | null;
+  dateCopyrighted?: Array<string> | null;
+  dateSubmitted?: Array<string> | null;
+  description?: Array<FreeText> | null;
+  educationLevel?: Array<CVorPointer> | null;
+  extent?: Array<FreeText> | null;
+  format?: Array<FreeText> | null;
+  hasFormat?: Array<InformationObject> | null;
+  hasPart?: Array<InformationObject> | null;
+  hasVersion?: Array<InformationObject> | null;
+  instructionalMethod?: Array<FreeText> | null;
+  isFormatOf?: Array<InformationObject> | null;
+  isPartOf?: Array<InformationObject> | null;
+  isReferencedBy?: Array<InformationObject> | null;
+  isReplacedBy?: Array<InformationObject> | null;
+  isRequiredBy?: Array<InformationObject> | null;
+  isVersionOf?: Array<InformationObject> | null;
+  issued?: Array<string> | null;
+  license?: Array<TripleType> | null;
+  mediator?: Array<TripleType> | null;
+  provenance?: Array<TripleType> | null;
+  publisher?: Array<TripleType> | null;
+  references?: Array<InformationObject> | null;
+  relation?: Array<InformationObject> | null;
+  replaces?: Array<InformationObject> | null;
+  requires?: Array<InformationObject> | null;
+  rights?: Array<TripleType> | null;
+  rightsHolder?: Array<TripleType> | null;
+  source?: Array<InformationObject> | null;
+  subject?: Array<TripleType> | null;
+  tableOfContents?: Array<InformationObject> | null;
+  valid?: Array<PeriodOfTime> | null;
+  abbreviation?: Array<FreeText1> | null;
+  isRatifiedBy?: Array<CVorPointer1> | null;
+};
+
+export type metaBwb = {
+  rechtsgebied?: Array<string> | null;
+  overheidsdomein?: Array<string> | null;
+  onderwerpVerdrag?: Array<string> | null;
+};
+
+export type InformationObject = {
+  resourceIdentifier?: string | null;
+  text?: string | null;
+};
+
+export type TripleType = {
+  scheme?: string | null;
+  resourceIdentifier?: string | null;
+  text?: string | null;
+};
+
+export type FreeText = {
+  lang?: string | null;
+  text?: string | null;
+};
+
+export type FreeText1 = {
+  lang?: string | null;
+  text?: string | null;
+};
+
+export type CVorPointer = {
+  scheme?: string | null;
+  resourceIdentifier?: string | null;
+  text?: string | null;
+};
+
+export type CVorPointer1 = {
+  scheme?: string | null;
+  resourceIdentifier?: string | null;
+  text?: string | null;
+};
+
+export type PeriodOfTime = {
+  start?: string | null;
+  end?: string | null;
+};
+
+export type Location = {
+  scheme?: string | null;
+  text?: string | null;
+};
