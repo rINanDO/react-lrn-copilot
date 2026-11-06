@@ -9,6 +9,7 @@ vi.mock('../component/bwb/bwb-expressions', () => ({ default: () => <div>express
 vi.mock('../component/page/bwb-landing-page', () => ({ default: () => <div>landing page</div> }));
 vi.mock('../component/bwb/toestand-view', () => ({ default: () => <div>toestand page</div> }));
 vi.mock('../component/cvdr/cvdr-view', () => ({ default: () => <div>cvdr page</div> }));
+vi.mock('../component/wti/wti-page', () => ({ default: () => <div>wti page</div> }));
 
 afterEach(cleanup);
 
@@ -22,6 +23,7 @@ describe('router', () => {
     ['/bwb/zoeken?q=grondwet', 'search page'],
     ['/bwb/BWBR0001840', 'expressions page'],
     ['/bwb/BWBR0001840/2023-02-22_0', 'toestand page'],
+    ['/bwb/BWBR0001840/2023-02-22_0/2940504', 'wti page'],
     ['/cvdr?q=handhaving', 'cvdr search page'],
     ['/cvdr/CVDR744131/2', 'cvdr page'],
   ])('renders %s as the %s', (url, page) => {

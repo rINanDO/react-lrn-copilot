@@ -54,8 +54,10 @@ export type Manifest = {
 export function getManifestUrl(
   bwbId: string,
   baseUrl = WETTEN_REPOSITORY_BASE_URL,
+  isToekomstig: boolean = false,
 ): string {
-  return `${baseUrl}/BWB/${encodeURIComponent(bwbId)}/manifest.xml`;
+  const path = isToekomstig ? "BWBTT" : "BWB";
+  return `${baseUrl}/${path}/${encodeURIComponent(bwbId)}/manifest.xml`;
 }
 
 /**
@@ -114,8 +116,9 @@ export function parseManifest(xml: string): Manifest {
 export async function getManifest(
   bwbId: string,
   { baseUrl, signal }: FetchOptions = {},
+  isToekomstig: boolean = false,
 ): Promise<Manifest> {
-  const response = await fetch(getManifestUrl(bwbId, baseUrl), {
+  const response = await fetch(getManifestUrl(bwbId, baseUrl, isToekomstig), {
     headers: { Accept: "application/xml" },
     signal,
   });

@@ -6,6 +6,7 @@ import CvdrPage from "../component/cvdr/cvdr-view";
 import BwbLandingPage from "../component/page/bwb-landing-page";
 import BwbSearchPage from "../component/search/bwb-search-page";
 import CvdrSearchPage from "../component/search/cvdr-search-page";
+import WtiPage from "../component/wti/wti-page";
 
 export const routeObjects: RouteObject[] = [
   {
@@ -27,6 +28,11 @@ export const routeObjects: RouteObject[] = [
     path: appRoutes.bwb,
     handle: { title: "Wetten" },
     element: <ToestandPage isToekomstig={false} />,
+  },
+  {
+    path: appRoutes.wti,
+    handle: { title: "Wetstechnische informatie – Wetten" },
+    element: <WtiPage />,
   },
   {
     path: appRoutes.cvdr,
